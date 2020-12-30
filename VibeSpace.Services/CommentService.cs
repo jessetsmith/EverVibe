@@ -10,18 +10,18 @@ using VibeSpace.MODELS;
 
 namespace VibeSpace.Services
 {
-    public class UserInfoService
+    public class CommentService
     {
         private readonly string _userID;
         private ApplicationUser _user;
         public string _location;
 
-        public UserInfoService(string userID)
+        public CommentService(string userID)
         {
             _userID = userID;
         }
 
-        private string ResolveAddressSync()
+        string ResolveAddressSync()
         {
             string Location;
             GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
@@ -45,111 +45,118 @@ namespace VibeSpace.Services
                     return _location = Location;
                 }
             }
-            else {
+            else
+            {
                 Location = "Address unknown.";
                 return _location = Location;
             }
 
         }
-        public bool CreateUserInfo(UserInfoCreate model)
+        public bool CreateComment(CommentCreate model, int id)
         {
+            var userInfoService = new UserInfoService(_userID);
+            var getUser = userInfoService.GetUsersByID(_userID);
+            var username = getUser.Username;
+
+            var vibeService = new VibeService(_userID);
+            var getVibeID = vibeService.GetVibesByID(id);
+            var vibeID = getVibeID.VibeID;
+
             var ctx = new ApplicationDbContext();
             var user = ctx.Users.Find(_userID);
             _user = user;
 
             var entity =
-                new UserInfo()
+                new CommentsAndReactions()
                 {
-                    Name = model.Name,
-                    Username = model.Username,
-                    Bio = model.Bio,
-                    Location = _location,
-                    Interests = model.Interests
+                    UserID = _userID,
+                    VibeID = vibeID,
+                    Username = username,
+                    CommentText = model.CommentText,
+                    DateCreated = DateTimeOffset.UtcNow
                 };
             using (ctx)
             {
-                ctx.UsersInfo.Add(entity);
+                ctx.Comments_Reactions.Add(entity);
 
                 return ctx.SaveChanges() == 1;
             }
         }
 
-        public IEnumerable<UserInfoListItem> GetUsers()
+        public IEnumerable<CommentListItem> GetComments()
         {
+
             using (var ctx = new ApplicationDbContext())
             {
                 var query =
                     ctx
-                    .UsersInfo
-                    .Where(e => e.UserID == _userID)
+                    .Comments_Reactions
                     .Select(
                         e =>
-                        new UserInfoListItem
+                        new CommentListItem
                         {
-                            Name = e.Name,
                             Username = e.Username,
-                            Location = e.Location
+                            DateCreated = e.DateCreated
                         });
-                return query.ToList();
-                    
+                return query.ToArray();
+
             }
         }
 
-        public UserInfoDetail GetUsersByID(string id)
+        public IEnumerable<CommentListItem> GetCommentsByVibeID(int id)
+        {
+
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                    .Comments_Reactions
+                    .Where(e => e.VibeID == id)
+                    .Select(
+                        e =>
+                        new CommentListItem
+                        {
+                            Username = e.Username,
+                            DateCreated = e.DateCreated
+                        });
+                return query.ToArray();
+
+            }
+        }
+
+        public CommentDetail GetCommentsByID(int? id)
         {
             using (var ctx = new ApplicationDbContext())
             {
                 var entity =
                     ctx
-                    .UsersInfo
-                    .Single(e => e.UserID == id);
+                    .Comments_Reactions
+                    .Single(e => e.CommentID == id);
                 return
-                    new UserInfoDetail
+                    new CommentDetail
                     {
-                        Name = entity.Name,
                         Username = entity.Username,
-                        Bio = entity.Bio,
-                        Location = entity.Location,
-                        Interests = entity.Interests
+                        CommentText = entity.CommentText,
+                        DateCreated = entity.DateCreated
                     };
             }
 
         }
 
-        public UserInfoDetail GetUsersByUsername(string username)
+        public bool UpdateComment(CommentEdit model)
         {
-            using (var ctx = new ApplicationDbContext())
-            {
-                var entity =
-                    ctx
-                    .UsersInfo
-                    .Single(e => e.Username == username);
-                return
-                    new UserInfoDetail
-                    {
-                        Name = entity.Name,
-                        Username = entity.Username,
-                        Bio = entity.Bio,
-                        Location = entity.Location,
-                        Interests = entity.Interests
-                    };
-            }
+            var userInfoService = new UserInfoService(_userID);
+            var getUser = userInfoService.GetUsersByID(_userID);
+            var username = getUser.Username;
 
-        }
-
-        public bool UpdateUserInfo(UserInfoEdit model)
-        {
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx
-                    .UsersInfo
+                    .Comments_Reactions
                     .Single(e => e.UserID == _userID);
 
-                entity.Name = model.Name;
-                entity.Username = model.Username;
-                entity.Bio = model.Bio;
-                entity.Location = model.Location;
-                entity.Interests = model.Interests;
+                entity.Username = username;
+                entity.CommentText = model.CommentText;
                 entity.DateModified = DateTimeOffset.UtcNow;
 
                 return ctx.SaveChanges() == 1;
@@ -157,21 +164,21 @@ namespace VibeSpace.Services
 
         }
 
-        public bool DeleteUserInfo()
+        public bool DeleteComments()
         {
+
             var ctx = new ApplicationDbContext();
 
             using (ctx)
             {
                 var entity =
                     ctx
-                    .UsersInfo
+                    .Comments_Reactions
                     .Single(e => e.UserID == _userID);
 
-                ctx.UsersInfo.Remove(entity);
+                ctx.Comments_Reactions.Remove(entity);
                 return ctx.SaveChanges() == 1;
             }
         }
-
     }
 }

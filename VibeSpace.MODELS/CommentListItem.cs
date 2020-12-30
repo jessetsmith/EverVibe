@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace VibeSpace.MODELS
 {
-    class CommentListItem
+    public class CommentListItem
     {
         public string Username { get; set; }
-        public int CommentID { get; set; }
         [Display(Name = "Created:")]
         public DateTimeOffset DateCreated { get; set; }
     }

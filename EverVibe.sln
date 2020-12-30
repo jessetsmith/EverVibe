@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EverVibe.MVC", "VibeSpace\EverVibe.MVC.csproj", "{C5060609-0112-4992-9216-EBAA7D2D03CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EvberVibe.DATA", "Vibespace.DATA\EvberVibe.DATA.csproj", "{029E8CF4-3415-46EC-A1BB-8CB41461B643}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EverVibe.DATA", "Vibespace.DATA\EverVibe.DATA.csproj", "{029E8CF4-3415-46EC-A1BB-8CB41461B643}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EverVibe.Services", "VibeSpace.Services\EverVibe.Services.csproj", "{0BFBC23C-14E7-4FB8-A8CB-93E65A144A62}"
 EndProject

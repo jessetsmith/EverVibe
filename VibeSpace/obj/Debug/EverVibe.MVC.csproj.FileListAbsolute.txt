@@ -106,3 +106,16 @@ C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\obj\Debug\EverVibe.MVC.cspr
 C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\obj\Debug\EverVibe.MVC.csproj.CopyComplete
 C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\obj\Debug\VibeSpace.dll
 C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\obj\Debug\VibeSpace.pdb
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\System.Net.Http.Formatting.dll
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\System.Web.Http.dll
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\VibeSpace.MODELS.dll
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\VibeSpace.Services.dll
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\Vibespace.DATA.dll
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\VibeSpace.MODELS.pdb
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\VibeSpace.MODELS.dll.config
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\VibeSpace.Services.pdb
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\VibeSpace.Services.dll.config
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\System.Net.Http.Formatting.xml
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\System.Web.Http.xml
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\Vibespace.DATA.pdb
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace\bin\Vibespace.DATA.dll.config

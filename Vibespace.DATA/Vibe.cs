@@ -16,7 +16,7 @@ namespace Vibespace.DATA
         public int VibeID { get; set; }
         [ForeignKey(nameof(UserID))]
         public virtual ApplicationUser User { get; set; }
-        public virtual int? UserID { get; set; }
+        public virtual string UserID { get; set; }
         public string Username { get; set; }
         public string Title { get; set; }
         public string Location { get; set; }

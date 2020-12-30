@@ -74,9 +74,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vibespace.DATA\EvberVibe.DATA.csproj">
+    <ProjectReference Include="..\Vibespace.DATA\EverVibe.DATA.csproj">
       <Project>{029e8cf4-3415-46ec-a1bb-8cb41461b643}</Project>
-      <Name>EvberVibe.DATA</Name>
+      <Name>EverVibe.DATA</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
