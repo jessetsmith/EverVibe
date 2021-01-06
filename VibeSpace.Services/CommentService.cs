@@ -164,7 +164,7 @@ namespace VibeSpace.Services
 
         }
 
-        public bool DeleteComments()
+        public bool DeleteComments(int commentID)
         {
 
             var ctx = new ApplicationDbContext();
@@ -174,7 +174,7 @@ namespace VibeSpace.Services
                 var entity =
                     ctx
                     .Comments_Reactions
-                    .Single(e => e.UserID == _userID);
+                    .Single(e => e.CommentID == commentID && e.UserID == _userID);
 
                 ctx.Comments_Reactions.Remove(entity);
                 return ctx.SaveChanges() == 1;

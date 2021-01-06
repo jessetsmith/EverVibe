@@ -183,7 +183,7 @@ namespace VibeSpace.Services
 
             }
 
-            public bool DeleteVibe()
+            public bool DeleteVibe(int vibeID)
             {
                 var ctx = new ApplicationDbContext();
 
@@ -192,7 +192,7 @@ namespace VibeSpace.Services
                     var entity =
                         ctx
                         .Vibes
-                        .Single(e => e.UserID == _userID);
+                        .Single(e => e.VibeID == vibeID && e.UserID == _userID);
 
                     ctx.Vibes.Remove(entity);
                     return ctx.SaveChanges() == 1;

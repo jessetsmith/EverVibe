@@ -43,6 +43,8 @@ namespace VibeSpace.Controllers
         }
 
         [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
+
         public ActionResult Create(CommentCreate comment, int id)
         {
             var vibe = CreateVibeService().GetVibesByID(id).VibeID;
@@ -78,7 +80,7 @@ namespace VibeSpace.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var service = CreateCommentService().DeleteComments();
+            var service = CreateCommentService().DeleteComments(id);
             if (!service.Equals(1))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

@@ -70,7 +70,7 @@ namespace VibeSpace.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var service = CreateVibeService().DeleteVibe();
+            var service = CreateVibeService().DeleteVibe(id);
             if (!service.Equals(1))
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);

@@ -42,6 +42,7 @@ namespace VibeSpace.Controllers
         }
 
         [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
         public ActionResult Create(UserInfoCreate user)
         {
             if (ModelState.IsValid)
