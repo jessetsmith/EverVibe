@@ -38,33 +38,56 @@ namespace VibeSpace.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            var userId = User.Identity.GetUserId();
+
+            if (CreateUserInfoService().GetUsersByUserId(userId) == null)
+            {
+                return View();
+            }
+            else
+            {
+                return JavaScript("alert('User Info Already Exists. If you'd like to make changes, please use the Edit Option')");
+
+            }
         }
 
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
         public ActionResult Create(UserInfoCreate user)
         {
-            if (ModelState.IsValid)
-            {
-                var service = CreateUserInfoService().CreateUserInfo(user);
-                if (!service.Equals(1))
+            
+                if (ModelState.IsValid)
                 {
-                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    HttpPostedFileBase file = Request.Files["Image"];
+
+                    var service = CreateUserInfoService().CreateUserInfo(user, file);
+                    if (service)
+                    {
+                        return RedirectToAction("Index");
+
+                    }
+                    else
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                    }
+                    //if (!service.Equals(1))
+                    //{
+                    //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                    //}
                 }
-                return RedirectToAction("Index");
-            }
             return View(user);
         }
 
         //GET : Delete
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(string id)
         {
+            id = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            UserInfo user = _db.UsersInfo.Find(id);
+            UserInfoDetail user = CreateUserInfoService().GetUsersByUserId(id);
             if (user == null)
             {
                 return HttpNotFound();
@@ -74,24 +97,30 @@ namespace VibeSpace.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id)
+        public ActionResult Delete()
         {
             var service = CreateUserInfoService().DeleteUserInfo();
-            if (!service.Equals(1))
+            if (service)
+            {
+                return RedirectToAction("Index");
+
+            }
+            else
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             }
-            return RedirectToAction("Index");
         }
 
         //GET : Edit
         public ActionResult Edit(string id)
         {
+            id = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var user = CreateUserInfoService().GetUsersByID(id);
+            var user = CreateUserInfoService().GetUsersByUserIdEdit(id);
            
             if (user == null)
             {
@@ -108,11 +137,16 @@ namespace VibeSpace.Controllers
             if (ModelState.IsValid)
             {
                 var service = CreateUserInfoService().UpdateUserInfo(user);
-                if (!service.Equals(1))
+                if (service)
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 }
-                return RedirectToAction("Index");
             }
             return View(user);
         }
@@ -121,11 +155,12 @@ namespace VibeSpace.Controllers
 
         public ActionResult Details(string id)
         {
+            id = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var user = CreateUserInfoService().GetUsersByID(id);
+            var user = CreateUserInfoService().GetUsersByUserId(id);
 
             if (user == null)
             {

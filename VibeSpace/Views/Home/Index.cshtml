@@ -1,52 +1,45 @@
-﻿@{
+﻿@model IEnumerable<VibeSpace.MODELS.VibeListItem>
+
+@{
     ViewBag.Title = "Home Page";
 }
 
 @*<div class="jumbotron">
-    <h1>VIBE with us</h1>
-    <p class="lead">Whether it's the music, the scenery, or the all-around atmosphere, this is the place to share your favorite vibes with the world</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>*@
+        <h1>VIBE with us</h1>
+        <p class="lead">Whether it's the music, the scenery, or the all-around atmosphere, this is the place to share your favorite vibes with the world</p>
+        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    </div>*@
 <section>
     <div class="container-fluid" id="page-wrapper">
         <div class="container-fluid" id="main">
             <!-- <div class="container-fluid" id="content-wrapper">
             <div class="container-fluid" id="content"> -->
             <div class="border"></div>
-                <div class="scrolling-wrapper">
-                    <div id="card-one" class="card"></div>
-                    <div id="card-two" class="card"></div>
-                    <div id="card-three" class="card"></div>
-                    <div id="card-four" class="card"></div>
-                    <div id="card-five" class="card"></div>
-                    <div id="card-six" class="card"></div>
-                    <div id="card-seven" class="card"></div>
-                    <div id="card-eight" class="card"></div>
-                    <div id="card-nine" class="card"></div>
-                </div>
-            
+            <div class="scrolling-wrapper">
+                @{ 
+                    foreach (var item in Model)
+                    {
+                        <div id="card-@item.VibeID.ToString()" class="card">
+                            <div class="cardNameTitle">
+                                <h3 id="cardName">@*@Html.DisplayFor(modelItem => item.Username)*@<a id="userDetailLink" href="@Url.Action("Details", "UserInfo")">@Html.DisplayFor(modelItem => item.Username)</a> &nbsp;&nbsp;|&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)</h3>
+                                @*<h4 id="cardTitle">@Html.DisplayFor(modelItem => item.Title) </h4>*@
+                            </div>
+                            <h5>@Html.DisplayFor(modelItem => item.Location)</h5>
+                            @{
+                                var image = item.Image;
+                                String img64 = Convert.ToBase64String(image);
+                                String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
+                            }
+                            <img src="@img64Url" height="300" width="300" @*style="border-radius:50%;*@ />
+                            <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                            @*<ul>@Html.DisplayFor(modelItem => item.Tags.ToList())</ul>*@
+                        </div>
+
+                    }
+                }
+                
+            </div>
+
         </div>
     </div>
 </section>
-
-@*<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>*@

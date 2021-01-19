@@ -26,7 +26,14 @@ namespace VibeSpace.Controllers
         // GET: Vibes
         public ActionResult Index()
         {
-            var vibe = CreateVibeService().GetVibes();
+            IEnumerable< VibeListItem> vibe = CreateVibeService().GetVibes();
+
+            return View(vibe);
+        }
+
+        public ActionResult List()
+        {
+            var vibe = CreateVibeService().GetVibeDetails();
 
             return View(vibe);
         }
@@ -41,12 +48,20 @@ namespace VibeSpace.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = CreateVibeService().CreateVibe(vibe);
-                if (!service.Equals(1))
+                HttpPostedFileBase file = Request.Files["VibeImage"];
+
+                var service = CreateVibeService().CreateVibe(vibe, file);
+                if (service)
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 }
-                return RedirectToAction("Index");
+
             }
             return View(vibe);
         }

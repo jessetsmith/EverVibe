@@ -69,9 +69,8 @@ namespace VibeSpace.Services
             var entity =
                 new CommentsAndReactions()
                 {
-                    UserID = _userID,
+                    Id = _userID,
                     VibeID = vibeID,
-                    Username = username,
                     CommentText = model.CommentText,
                     DateCreated = DateTimeOffset.UtcNow
                 };
@@ -95,7 +94,8 @@ namespace VibeSpace.Services
                         e =>
                         new CommentListItem
                         {
-                            Username = e.Username,
+                            // TODO: Change where you get username value from
+                            //Username = e.Username,
                             DateCreated = e.DateCreated
                         });
                 return query.ToArray();
@@ -116,7 +116,7 @@ namespace VibeSpace.Services
                         e =>
                         new CommentListItem
                         {
-                            Username = e.Username,
+                            //Username = e.Username,
                             DateCreated = e.DateCreated
                         });
                 return query.ToArray();
@@ -135,7 +135,7 @@ namespace VibeSpace.Services
                 return
                     new CommentDetail
                     {
-                        Username = entity.Username,
+                        //Username = entity.Username,
                         CommentText = entity.CommentText,
                         DateCreated = entity.DateCreated
                     };
@@ -153,9 +153,9 @@ namespace VibeSpace.Services
             {
                 var entity = ctx
                     .Comments_Reactions
-                    .Single(e => e.UserID == _userID);
+                    .Single(e => e.Id == _userID);
 
-                entity.Username = username;
+                //entity.Username = username;
                 entity.CommentText = model.CommentText;
                 entity.DateModified = DateTimeOffset.UtcNow;
 
@@ -174,7 +174,7 @@ namespace VibeSpace.Services
                 var entity =
                     ctx
                     .Comments_Reactions
-                    .Single(e => e.CommentID == commentID && e.UserID == _userID);
+                    .Single(e => e.CommentID == commentID && e.Id == _userID);
 
                 ctx.Comments_Reactions.Remove(entity);
                 return ctx.SaveChanges() == 1;

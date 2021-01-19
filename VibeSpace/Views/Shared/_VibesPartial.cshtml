@@ -1,0 +1,48 @@
+﻿@model IEnumerable<VibeSpace.MODELS.VibeDetail>
+
+@*@{
+        ViewBag.Title = "Index";
+    }
+
+    <h2>Index</h2>*@
+<section>
+    <div class="container-fluid" id="page-wrapper">
+        <div class="container-fluid" id="main">
+            <!-- <div class="container-fluid" id="content-wrapper">
+            <div class="container-fluid" id="content"> -->
+            <div class="border"></div>
+            <div class="scrolling-wrapper">
+                @{ foreach (var item in Model)
+                    {
+
+                        //for (int i = 1; i <= Model.Count(); i++){
+                        //    int cardNum = i;
+                        //    cardNum.ToString();
+                        <div @*id=`card-${cardNum}`*@ class="card">
+                            <h1>@Html.DisplayFor(modelItem => item.Username)</h1>
+                            <h3>@Html.DisplayFor(modelItem => item.Title) </h3>
+                            <h5>@Html.DisplayFor(modelItem => item.Location)</h5>
+                            @{
+                                var image = item.Image;
+                                String img64 = Convert.ToBase64String(image);
+                                String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
+                            }
+                            <img src="@img64Url" height="300" width="300" @*style="border-radius:50%;*@ />
+                            <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                            @*<ul>@Html.DisplayFor(modelItem => item.Tags.ToList())</ul>*@
+                        </div>
+
+                    }
+                }
+            </div>
+
+        </div>
+    </div>
+</section>
+
+@*}*@
+
+@*<p>
+        @Html.ActionLink("Create New", "Create")
+    </p>*@
+

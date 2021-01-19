@@ -47,6 +47,7 @@ namespace VibeSpace.DATA
                 .Configurations
                 .Add(new IdentityUserLoginConfiguration())
                 .Add(new IdentityUserRoleConfiguration());
+
         }
     }
 

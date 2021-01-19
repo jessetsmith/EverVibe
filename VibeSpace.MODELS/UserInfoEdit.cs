@@ -10,11 +10,11 @@ namespace VibeSpace.MODELS
 {
     public class UserInfoEdit
     {
-        public string UserID { get; set; }
         public string Name { get; set; }
         public string Username { get; set; }
         public string Bio { get; set; }
         public string Location { get; set; }
-        public ICollection<Tag> Interests { get; set; }
+        public byte[] ProfileImage { get; set; }
+        public virtual ICollection<Tag> Interests { get; set; }
     }
 }

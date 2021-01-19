@@ -24,6 +24,10 @@ a {
     color: white;
 }
 
+.register-wrapper {
+    text-align: center;
+}
+
 #registerLink :hover {
     color: #6bf4fb;
 }
@@ -34,6 +38,7 @@ a {
 .navbar {
     font-family: 'Megrim', cursive;
     font-size: 1.5em;
+    font-weight: bold;
 }
 
 .navbar-brand {
@@ -46,9 +51,44 @@ a {
 
 #loginForm {
     text-align: center;
+    margin-bottom: 10em;
+}
+
+#registerForm {
+   /* width: 100%;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5em;
+}
+
+/*.form-group {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}*/
+
+.col-md-12 {
+    float: none;
+}
+
+.form-control {
+    width: 25em;
 }
 
 #loginSubmit {
+    width: 10em;
+    background-color: #222222;
+}
+
+#registerSubmit {
     width: 10em;
     background-color: #222222;
 }
@@ -58,12 +98,15 @@ section {
     width: 100%;
     height: 100%;
     margin: 0;
+    margin-top: 2em;
+    margin-bottom: 2em;
     padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     align-content: center;
+    
 }
 
 .border {
@@ -134,12 +177,18 @@ section {
     flex: 0 0 auto;
     width: 50%;
     height: 35em;
-    background-color: black;
-    color: black;
+    background-color: #222222;
+    color: white;
     border-radius: 0;
-    padding: 1em;
+    padding: 0;
     border: 1px solid white;
     overflow: scroll;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .card::-webkit-scrollbar {
@@ -148,16 +197,36 @@ section {
 
     .card a {
         text-decoration: none;
-        color: #a35364;
+        color: white;
     }
 
         .card a:hover {
-            color: black;
+            color: #6bf4fb;
         }
 
     .card h1 {
         font-family: 'Montserrat Subrayada', sans-serif;
         color: black;
+    }
+
+    #cardName{
+        margin-top: -2.5em;
+        /*position: absolute;
+        z-index: 0;*/
+    }
+
+/*#cardTitle {
+    margin-top: -1em;
+    position: absolute;
+    z-index: 1;
+}*/
+
+    .cardNameTitle {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
     }
 
 @media (max-width: 800px) {
@@ -209,6 +278,34 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*USER INFO CREATE*/
+#bio-text {
+    color: black;
+}
+
+/*USER INFO DETAIL*/
+#userInfoDetail {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    padding: 1em;
+}
+
+infoDivs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    vertical-align: central;
+}
+
 
 footer p {
     color: white;
