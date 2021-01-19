@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VibeSpace.MODELS
 {
-    class CommentDetail
+    public class CommentDetail
     {
         public string Username { get; set; }
         public int CommentID { get; set; }

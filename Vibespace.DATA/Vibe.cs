@@ -14,17 +14,19 @@ namespace Vibespace.DATA
     {
         [Key]
         public int VibeID { get; set; }
-        [ForeignKey(nameof(UserID))]
+        [ForeignKey(nameof(User))]
+        public string Id { get; set; }
         public virtual ApplicationUser User { get; set; }
-        public virtual int? UserID { get; set; }
         public string Username { get; set; }
         public string Title { get; set; }
         public string Location { get; set; }
+        public byte[] Image { get; set; }
         public string Description { get; set; }
-        public ICollection<Tag> Tags { get; set; }
-        public ICollection<CommentsAndReactions> Comments { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<CommentsAndReactions> Comments { get; set; }
         public bool Private { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset DateModified { get; set; }
     }
+
 }

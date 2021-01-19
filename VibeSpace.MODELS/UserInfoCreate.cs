@@ -14,6 +14,7 @@ namespace VibeSpace.MODELS
         public string Username { get; set; }
         public string Bio { get; set; }
         public string Location { get; set; }
-        public ICollection<Tag> Interests { get; set; }
+        public byte[] ProfileImage { get; set; }
+        public virtual ICollection<Tag> Interests { get; set; }
     }
 }

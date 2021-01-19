@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Device.Location;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
+using Vibespace.DATA;
 using VibeSpace.DATA;
+using VibeSpace.MODELS;
 
 namespace VibeSpace.Services
 {
-    class VibeService
+    public class VibeService
     {
             private readonly string _userID;
             private ApplicationUser _user;
@@ -50,84 +54,173 @@ namespace VibeSpace.Services
                 }
 
             }
-            public bool CreateVibe( model)
-            {
-                var ctx = new ApplicationDbContext();
-                var user = ctx.Users.Find(_userID);
-                _user = user;
 
-                var entity =
-                    new UserInfo()
-                    {
-                        Name = model.Name,
-                        Username = model.Username,
-                        Bio = model.Bio,
-                        Location = _location,
-                        Interests = model.Interests
+        public byte[] ConvertToBytes(HttpPostedFileBase image)
+        {
+            byte[] imageBytes = null;
+            BinaryReader reader = new BinaryReader(image.InputStream);
+            imageBytes = reader.ReadBytes((int)image.ContentLength);
+            return imageBytes;
+        }
+
+        public bool CreateVibe(VibeCreate model, HttpPostedFileBase file)
+            {
+            model.Image = ConvertToBytes(file);
+
+            var userInfoService = new UserInfoService(_userID);
+            var getUser = userInfoService.GetUsersByUserId(_userID);
+            var username = getUser.Username;
+
+            var ctx = new ApplicationDbContext();
+          
+
+            var entity =
+                new Vibe()
+                {
+                    Id = _userID,
+                    Username = username,
+                    Title = model.Title,
+                    Location = _location,
+                    Image = model.Image,
+                    Description = model.Description,
+                    Tags = model.Tags,
+                    Private = model.Private,
+                    DateCreated = DateTimeOffset.UtcNow
                     };
                 using (ctx)
                 {
-                    ctx.UsersInfo.Add(entity);
+                    ctx.Vibes.Add(entity);
 
                     return ctx.SaveChanges() == 1;
                 }
             }
 
-            public IEnumerable<UserInfoListItem> GetUsers()
+            public IEnumerable<VibeListItem> GetVibes()
             {
-                using (var ctx = new ApplicationDbContext())
+         
+            using (var ctx = new ApplicationDbContext())
                 {
                     var query =
                         ctx
-                        .UsersInfo
-                        .Where(e => e.UserID == _userID)
+                        .Vibes
+                        //.Where(e => e.UserID == _userID)
                         .Select(
                             e =>
-                            new UserInfoListItem
+                            new VibeListItem
                             {
-                                Name = e.Name,
+                                VibeID = e.VibeID,
                                 Username = e.Username,
-                                Location = e.Location
+                                Title = e.Title,
+                                Location = e.Location,
+                                Image = e.Image,
+                                Description = e.Description,
+                                //Tags = e.Tags
                             });
                     return query.ToArray();
 
                 }
             }
 
-            public UserInfoDetail GetUsersByID(string id)
+        public IList<VibeDetail> GetVibeDetails()
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                    .Vibes
+                    //.Where(e => e.UserID == _userID)
+                    .Select(
+                        e =>
+                        new VibeDetail
+                        {
+                            VibeID = e.VibeID,
+                            Username = e.Username,
+                            Title = e.Title,
+                            Location = e.Location,
+                            Image = e.Image,
+                            Description = e.Description,
+                            Comments = e.Comments
+
+                            //Tags = e.Tags
+                        });
+                return query.ToArray();
+
+            }
+
+        }
+
+        public IEnumerable<VibeListItem> GetVibesByUser(string username)
+        {
+            var userInfoService = new UserInfoService(_userID);
+            var getUser = userInfoService.GetUsersByUserId(_userID);
+            var _username = getUser.Username;
+
+            using (var ctx = new ApplicationDbContext())
+            {
+                var query =
+                    ctx
+                    .Vibes
+                    .Where(e => e.Username == _username)
+                    .Select(
+                        e =>
+                        new VibeListItem
+                        {
+                            VibeID = e.VibeID,
+                            Username = e.Username,
+                            Title = e.Title,
+                            Location = e.Location,
+                            Image = e.Image,
+                            Description = e.Description,
+                            //Tags = e.Tags
+                        });
+                return query.ToArray();
+
+            }
+        }
+
+        public VibeDetail GetVibesByID(int? id)
             {
                 using (var ctx = new ApplicationDbContext())
                 {
                     var entity =
                         ctx
-                        .UsersInfo
-                        .Single(e => e.UserID == id);
-                    return
-                        new UserInfoDetail
-                        {
-                            Name = entity.Name,
+                        .Vibes
+                        .Single(e => e.VibeID == id);
+                return
+                    new VibeDetail
+                    {
+                            VibeID = entity.VibeID,
                             Username = entity.Username,
-                            Bio = entity.Bio,
+                            Title = entity.Title,
                             Location = entity.Location,
-                            Interests = entity.Interests
+                            Image = entity.Image,
+                            Description = entity.Description,
+                            Tags = entity.Tags,
+                            Comments = entity.Comments
                         };
                 }
 
             }
 
-            public bool UpdateUserInfo(UserInfoEdit model, int userID)
+                
+
+            public bool UpdateVibe(VibeEdit model)
             {
-                using (var ctx = new ApplicationDbContext())
+            var userInfoService = new UserInfoService(_userID);
+            var getUser = userInfoService.GetUsersByID(_userID);
+            var username = getUser.Username;
+
+            using (var ctx = new ApplicationDbContext())
                 {
                     var entity = ctx
-                        .UsersInfo
-                        .Single(e => e.UserID == _userID);
+                        .Vibes
+                        .Single(e => e.Id == _userID);
 
-                    entity.Name = model.Name;
-                    entity.Username = model.Username;
-                    entity.Bio = model.Bio;
+                    entity.Username = username;
+                    entity.Title = model.Title;
                     entity.Location = model.Location;
-                    entity.Interests = model.Interests;
+                    entity.Description = model.Description;
+                    entity.Tags = model.Tags;
                     entity.DateModified = DateTimeOffset.UtcNow;
 
                     return ctx.SaveChanges() == 1;
@@ -135,7 +228,7 @@ namespace VibeSpace.Services
 
             }
 
-            public bool DeleteUserInfo(int userID)
+            public bool DeleteVibe(int vibeID)
             {
                 var ctx = new ApplicationDbContext();
 
@@ -143,10 +236,10 @@ namespace VibeSpace.Services
                 {
                     var entity =
                         ctx
-                        .UsersInfo
-                        .Single(e => e.UserID == _userID);
+                        .Vibes
+                        .Single(e => e.VibeID == vibeID && e.Id == _userID);
 
-                    ctx.UsersInfo.Remove(entity);
+                    ctx.Vibes.Remove(entity);
                     return ctx.SaveChanges() == 1;
                 }
             }

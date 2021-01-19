@@ -1,12 +1,268 @@
-﻿body {
+﻿@import url('https://fonts.googleapis.com/css2?family=Megrim&display=swap');
+
+body {
     padding-top: 50px;
     padding-bottom: 20px;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background-attachment: fixed;
+    background-color: #213040;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    color: white;
+}
+
+a {
+    text-decoration:none;
+    color: white;
+}
+
+.register-wrapper {
+    text-align: center;
+}
+
+#registerLink :hover {
+    color: #6bf4fb;
+}
+
+.row {
+    text-align: center;
+}
+.navbar {
+    font-family: 'Megrim', cursive;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.navbar-brand {
+    font-size: 1.5em;
+}
+
+#hr-top {
+    margin-top: -2em;
+}
+
+#loginForm {
+    text-align: center;
+    margin-bottom: 10em;
+}
+
+#registerForm {
+   /* width: 100%;*/
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 5em;
+}
+
+/*.form-group {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}*/
+
+.col-md-12 {
+    float: none;
+}
+
+.form-control {
+    width: 25em;
+}
+
+#loginSubmit {
+    width: 10em;
+    background-color: #222222;
+}
+
+#registerSubmit {
+    width: 10em;
+    background-color: #222222;
+}
+
+
+section {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    margin-top: 2em;
+    margin-bottom: 2em;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    
+}
+
+.border {
+    width: 30.3em;
+    height: 35.3em;
+    padding: 1rem;
+    background: linear-gradient(to bottom right, #6bf4fb, white);
+    position: relative;
+    z-index: 1;
+}
+
+.scrolling-wrapper {
+    position: absolute;
+    z-index: 3;
+    display: flex;
+    align-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 60em;
+    height: 35em;
+    padding: 0;
+    margin: 0;
+}
+
+    .scrolling-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+
+}
+
+@media (max-width: 800px) {
+    #content-wrapper {
+        width: 100%;
+    }
+
+    #content {
+        height: 520px;
+    }
+
+    .scrolling-wrapper {
+        flex-direction: column;
+        width: 100%;
+    }
+}
+
+@media (max-width: 500px) {
+    #content {
+        width: 100%;
+    }
+
+    .scrolling-wrapper {
+        height: 33em;
+    }
+}
+
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+    .scrolling-wrapper {
+        margin-top: -15em;
+        margin-bottom: -5em;
+    }
+}
+
+.card {
+    border: 1px solid white;
+    flex: 0 0 auto;
+    width: 50%;
+    height: 35em;
+    background-color: #222222;
+    color: white;
+    border-radius: 0;
+    padding: 0;
+    border: 1px solid white;
+    overflow: scroll;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card::-webkit-scrollbar {
+    display: none;
+}
+
+    .card a {
+        text-decoration: none;
+        color: white;
+    }
+
+        .card a:hover {
+            color: #6bf4fb;
+        }
+
+    .card h1 {
+        font-family: 'Montserrat Subrayada', sans-serif;
+        color: black;
+    }
+
+    #cardName{
+        margin-top: -2.5em;
+        /*position: absolute;
+        z-index: 0;*/
+    }
+
+/*#cardTitle {
+    margin-top: -1em;
+    position: absolute;
+    z-index: 1;
+}*/
+
+    .cardNameTitle {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+    }
+
+@media (max-width: 800px) {
+    .card {
+        width: 80%;
+        height: 33em;
+    }
+}
+
+@media (max-width: 770px) {
+    .card {
+        width: 90%;
+    }
+}
+
+@media (max-width: 500px) {
+    .card {
+        width: 100%;
+    }
+}
+
+#main {
+    width: 60em;
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
 }
 
 /* Set padding to keep content from hitting the edges */
 .body-content {
     padding-left: 15px;
     padding-right: 15px;
+    background-color: #213040;
 }
 
 /* Override the default bootstrap behavior where horizontal description lists 
@@ -22,3 +278,36 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/*USER INFO CREATE*/
+#bio-text {
+    color: black;
+}
+
+/*USER INFO DETAIL*/
+#userInfoDetail {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    padding: 1em;
+}
+
+infoDivs {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    vertical-align: central;
+}
+
+
+footer p {
+    color: white;
+}
+

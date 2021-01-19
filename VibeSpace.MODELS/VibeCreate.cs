@@ -12,9 +12,9 @@ namespace VibeSpace.MODELS
     {
         public string Title { get; set; }
         public string Location { get; set; }
+        public byte[] Image { get; set; }
         public string Description { get; set; }
-        public ICollection<Tag> Tags { get; set; }
-        public ICollection<CommentsAndReactions> Comments { get; set; }
+        public virtual ICollection<Tag> Tags { get; set; }
         public bool Private { get; set; }
     }
 }
