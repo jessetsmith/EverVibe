@@ -23,9 +23,20 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Vibes", "Index", "Vibe")</li>
+                    @{
+                        if (Request.IsAuthenticated)
+                        {
+                            <li>@Html.ActionLink("Create a Vibe", "Create", "Vibe")</li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Log in to create and share your favorite vibes!","Login", "Account")</li>
+                        }
+                    }
+
                     @*<li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
-                </ul>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+</ul>
                 @Html.Partial("_LoginPartial")
             </div>
         </div>

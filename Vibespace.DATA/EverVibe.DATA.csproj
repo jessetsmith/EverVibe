@@ -86,6 +86,10 @@
     <Compile Include="Migrations\202101152007257_edited ICollections on classes.Designer.cs">
       <DependentUpon>202101152007257_edited ICollections on classes.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202101242201113_updated for ICollection Usage.cs" />
+    <Compile Include="Migrations\202101242201113_updated for ICollection Usage.Designer.cs">
+      <DependentUpon>202101242201113_updated for ICollection Usage.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Tag.cs" />
     <Compile Include="UserInfo.cs" />
@@ -102,6 +106,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202101152007257_edited ICollections on classes.resx">
       <DependentUpon>202101152007257_edited ICollections on classes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202101242201113_updated for ICollection Usage.resx">
+      <DependentUpon>202101242201113_updated for ICollection Usage.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

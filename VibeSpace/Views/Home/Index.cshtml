@@ -1,4 +1,9 @@
-﻿@model IEnumerable<VibeSpace.MODELS.VibeListItem>
+﻿@using Microsoft.AspNet.Identity.EntityFramework
+@using Microsoft.AspNet.Identity.Owin
+@using System.Security.Principal
+@using VibeSpace.Controllers
+@using VibeSpace.Services
+@model IEnumerable<VibeSpace.MODELS.VibeListItem>
 
 @{
     ViewBag.Title = "Home Page";
@@ -16,28 +21,40 @@
             <div class="container-fluid" id="content"> -->
             <div class="border"></div>
             <div class="scrolling-wrapper">
-                @{ 
+                @{
                     foreach (var item in Model)
                     {
                         <div id="card-@item.VibeID.ToString()" class="card">
-                            <div class="cardNameTitle">
-                                <h3 id="cardName">@*@Html.DisplayFor(modelItem => item.Username)*@<a id="userDetailLink" href="@Url.Action("Details", "UserInfo")">@Html.DisplayFor(modelItem => item.Username)</a> &nbsp;&nbsp;|&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)</h3>
-                                @*<h4 id="cardTitle">@Html.DisplayFor(modelItem => item.Title) </h4>*@
-                            </div>
-                            <h5>@Html.DisplayFor(modelItem => item.Location)</h5>
+                            <h3 id="cardName">@Html.ActionLink(item.Username, "PublicDetails", new { id = item.VibeID }) &nbsp;&nbsp;|&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)</h3>
+                          
+                @*@{
+                                        if (Request.IsAuthenticated)
+                                        {
+                                            var user = User.Identity;
+                                            var userId = user.
+
+                                            if (item.Username == username)
+                                            {
+                                        <span class="vibeIcons"><i class="fas fa-edit"></i><i class="fas fa-trash"></i></span>
+                                    }
+
+                            }
+
+                            }*@
+                            <h4 style="margin-top:-.2em;margin-bottom:1em">@Html.DisplayFor(modelItem => item.Location)</h4>
                             @{
                                 var image = item.Image;
                                 String img64 = Convert.ToBase64String(image);
                                 String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
                             }
-                            <img src="@img64Url" height="300" width="300" @*style="border-radius:50%;*@ />
-                            <p>@Html.DisplayFor(modelItem => item.Description)</p>
+                            <img src="@img64Url" class="vibeImage" height="350" width="400" @*style="border-radius:50%;*@ />
+                            <p id="vibeDescription">@Html.DisplayFor(modelItem => item.Description)</p>
                             @*<ul>@Html.DisplayFor(modelItem => item.Tags.ToList())</ul>*@
                         </div>
 
                     }
                 }
-                
+
             </div>
 
         </div>

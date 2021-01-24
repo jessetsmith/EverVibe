@@ -1,5 +1,6 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Megrim&display=swap');
-
+﻿/*@import url('https://fonts.googleapis.com/css2?family=Major+Mono+Display&family=Megrim&display=swap');
+*/
+@import url('https://fonts.googleapis.com/css2?family=Megrim&family=Raleway&display=swap');
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -30,6 +31,11 @@ a {
 
 #registerLink :hover {
     color: #6bf4fb;
+}
+
+.createMessage {
+    vertical-align: central;
+    font-family: 'Raleway', sans-serif;
 }
 
 .row {
@@ -83,6 +89,22 @@ a {
     width: 25em;
 }
 
+label{
+    margin-right: 1em;
+}
+
+textarea{
+    color: black;
+}
+
+.checkbox {
+    margin-left: 1.5em;
+}
+
+textarea::-webkit-scrollbar {
+    display: none;
+}
+
 #loginSubmit {
     width: 10em;
     background-color: #222222;
@@ -111,7 +133,7 @@ section {
 
 .border {
     width: 30.3em;
-    height: 35.3em;
+    height: 40.3em;
     padding: 1rem;
     background: linear-gradient(to bottom right, #6bf4fb, white);
     position: relative;
@@ -128,7 +150,7 @@ section {
     flex-wrap: nowrap;
     overflow-x: auto;
     width: 60em;
-    height: 35em;
+    height: 40em;
     padding: 0;
     margin: 0;
 }
@@ -176,7 +198,7 @@ section {
     border: 1px solid white;
     flex: 0 0 auto;
     width: 50%;
-    height: 35em;
+    min-height: 40em;
     background-color: #222222;
     color: white;
     border-radius: 0;
@@ -209,11 +231,25 @@ section {
         color: black;
     }
 
-    #cardName{
-        margin-top: -2.5em;
-        /*position: absolute;
-        z-index: 0;*/
-    }
+#cardName {
+/*    margin-top: -2.5em;
+*/    font-family: 'Raleway', sans-serif;
+}
+
+.vibeImage {
+    margin-bottom: 1em;
+}
+
+#vibeDescription{
+    width: 90%;
+    text-justify: inter-cluster;
+}
+
+.vibeIcons {
+    font-size: 1em;
+}
+
+
 
 /*#cardTitle {
     margin-top: -1em;
@@ -232,8 +268,8 @@ section {
 @media (max-width: 800px) {
     .card {
         width: 80%;
-        height: 33em;
-    }
+/*        height: 33em;
+*/    }
 }
 
 @media (max-width: 770px) {

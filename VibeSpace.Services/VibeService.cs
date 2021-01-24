@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Device.Location;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -23,37 +25,52 @@ namespace VibeSpace.Services
                 _userID = userID;
             }
 
-            string ResolveAddressSync()
+            public string ResolveAddressSync()
             {
-                string Location;
-                GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
-                watcher.MovementThreshold = 1.0; // set to one meter
-                watcher.TryStart(false, TimeSpan.FromMilliseconds(1000));
+            //string Location;
+            //GeoCoordinateWatcher watcher = new GeoCoordinateWatcher(GeoPositionAccuracy.High);
+            //watcher.MovementThreshold = 1.0; // set to one meter
+            //watcher.TryStart(false, TimeSpan.FromMilliseconds(1000));
 
-                CivicAddressResolver resolver = new CivicAddressResolver();
+            //CivicAddressResolver resolver = new CivicAddressResolver();
 
-                if (watcher.Position.Location.IsUnknown == false)
-                {
-                    CivicAddress address = resolver.ResolveAddress(watcher.Position.Location);
+            //if (watcher.Position.Location.IsUnknown == false)
+            //{
+            //    CivicAddress address = resolver.ResolveAddress(watcher.Position.Location);
 
-                    if (!address.IsUnknown)
-                    {
-                        Location = $"Country:{address.CountryRegion}, City: {address.City}";
-                        return _location = Location;
-                    }
-                    else
-                    {
-                        Location = "Address unknown.";
-                        return _location = Location;
-                    }
-                }
-                else
-                {
-                    Location = "Address unknown.";
-                    return _location = Location;
-                }
+            //    if (!address.IsUnknown)
+            //    {
+            //        Location = address.CountryRegion + address.City;
+            //        return _location = Location;
+            //    }
+            //    else
+            //    {
+            //        Location = "Address unknown.";
+            //        return _location = Location;
+            //    }
+            //}
+            //else
+            //{
+            //    Location = "Address unknown.";
+            //    return _location = Location;
+            //}
 
+            String UserIP = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (string.IsNullOrEmpty(UserIP))
+            {
+                UserIP = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
             }
+
+            string url = $"http://ip-api.com/json/{UserIP}?fields=status,message,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as,query";
+            WebClient client = new WebClient();
+            string jsonstring = client.DownloadString(url);
+            dynamic dynObj = JsonConvert.DeserializeObject(jsonstring);
+            var city = HttpContext.Current.Session["City"];
+            city = dynObj.city;
+
+
+            return city.ToString();
+        }
 
         public byte[] ConvertToBytes(HttpPostedFileBase image)
         {
@@ -80,7 +97,7 @@ namespace VibeSpace.Services
                     Id = _userID,
                     Username = username,
                     Title = model.Title,
-                    Location = _location,
+                    Location = model.Location,
                     Image = model.Image,
                     Description = model.Description,
                     Tags = model.Tags,
@@ -202,9 +219,31 @@ namespace VibeSpace.Services
 
             }
 
-                
+        public VibeListItem GetVibesByUserID(string id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                    .Vibes
+                    .Single(e => e.Id == id);
+                return
+                    new VibeListItem
+                    {
+                        VibeID = entity.VibeID,
+                        Username = entity.Username,
+                        Title = entity.Title,
+                        Location = entity.Location,
+                        Image = entity.Image,
+                        Description = entity.Description,
+                        Tags = entity.Tags,
+                        Comments = entity.Comments
+                    };
+            }
 
-            public bool UpdateVibe(VibeEdit model)
+        }
+
+        public bool UpdateVibe(VibeEdit model)
             {
             var userInfoService = new UserInfoService(_userID);
             var getUser = userInfoService.GetUsersByID(_userID);

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using VibeSpace.MODELS;
@@ -19,17 +20,27 @@ namespace VibeSpace.Controllers
             return vibeService;
         }
 
-        private UserInfoService CreateUserInfoService()
+        public UserInfoService CreateUserInfoService()
         {
             var userId = User.Identity.GetUserId();
             var userService = new UserInfoService(userId);
             return userService;
         }
 
+        //public string GetUserId()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    var userService = new UserInfoService(userId);
+        //    var userInfo = userService.GetUsersByUserId(userId);
+        //    var user = userInfo.UserID;
+        //    return user;
+        //}
+
+
+
         public ActionResult Index()
         {
-            var userId = User.Identity.GetUserId();
-            var user = CreateUserInfoService().GetUsersByUserId(userId);
+         
             IEnumerable<VibeListItem> vibe = CreateVibeService().GetVibes();
 
             return View("Index", vibe);
@@ -47,6 +58,19 @@ namespace VibeSpace.Controllers
             ViewBag.Message = "Your contact page.";
 
             return View();
+        }
+
+        public ActionResult PublicDetails(int? id)
+        {
+            var vibe = CreateVibeService().GetVibesByID(id);
+            var user = CreateUserInfoService().GetUsersByUsername(vibe.Username);
+
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            return View(user);
         }
     }
 }

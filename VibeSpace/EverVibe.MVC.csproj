@@ -254,6 +254,9 @@
     <Content Include="Views\Vibe\Edit.cshtml" />
     <Content Include="Views\Vibe\Details.cshtml" />
     <Content Include="Views\Shared\_VibesPartial.cshtml" />
+    <Content Include="Views\UserInfo\PublicDetails.cshtml" />
+    <Content Include="Views\Home\PublicDetails.cshtml" />
+    <Content Include="Views\UserInfo\_UsersVibesPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

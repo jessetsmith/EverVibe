@@ -20,3 +20,5 @@ C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace.Services\obj\Debug\EverVibe
 C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace.Services\obj\Debug\EverVibe.Services.csproj.CopyComplete
 C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace.Services\obj\Debug\VibeSpace.Services.dll
 C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace.Services\obj\Debug\VibeSpace.Services.pdb
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace.Services\bin\Debug\Newtonsoft.Json.dll
+C:\Users\jessesmith\source\repos\VibeSpace\VibeSpace.Services\bin\Debug\Newtonsoft.Json.xml

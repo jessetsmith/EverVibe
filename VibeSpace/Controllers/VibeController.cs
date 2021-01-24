@@ -23,10 +23,33 @@ namespace VibeSpace.Controllers
             return vibeService;
         }
 
+        public UserInfoService CreateUserInfoService()
+        {
+            var userId = User.Identity.GetUserId();
+            var userService = new UserInfoService(userId);
+            return userService;
+        }
+
+
+        //public string GetUserId()
+        //{
+        //    var userId = User.Identity.GetUserId();
+        //    return userId;
+        //}
+
+        //public ContentResult GetLocation()
+        //{
+        //    var location = CreateVibeService().ResolveAddressSync();
+        //    HtmlString _location = Convert.toht
+        //    return location;
+
+        //}
+
+
         // GET: Vibes
         public ActionResult Index()
         {
-            IEnumerable< VibeListItem> vibe = CreateVibeService().GetVibes();
+            IEnumerable<VibeListItem> vibe = CreateVibeService().GetVibes();
 
             return View(vibe);
         }
@@ -40,6 +63,7 @@ namespace VibeSpace.Controllers
 
         public ActionResult Create()
         {
+
             return View();
         }
 

@@ -28,6 +28,14 @@ namespace VibeSpace.Controllers
             return userService;
         }
 
+        private VibeService CreateVibeService()
+        {
+            var userId = User.Identity.GetUserId();
+            var vibeService = new VibeService(userId);
+            return vibeService;
+        }
+
+        
         // GET: UserInfo
         public ActionResult Index()
         {
@@ -160,6 +168,7 @@ namespace VibeSpace.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            //var vibes = CreateVibeService().get
             var user = CreateUserInfoService().GetUsersByUserId(id);
 
             if (user == null)
@@ -168,5 +177,23 @@ namespace VibeSpace.Controllers
             }
             return View(user);
         }
+
+        public ActionResult PublicDetails(int? id)
+        {
+            var vibe = CreateVibeService().GetVibesByID(id);
+            var user = CreateUserInfoService().GetUsersByUsername(vibe.Username);
+            
+            if (user == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            return View(user);
+        }
+
+        //public ActionResult userVibes()
+        //{
+            
+        //}
     }
 }

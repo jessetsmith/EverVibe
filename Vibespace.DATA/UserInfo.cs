@@ -12,6 +12,10 @@ namespace Vibespace.DATA
 {
     public class UserInfo
     {
+        public UserInfo()
+        {
+            this.Interests = new HashSet<Tag>();
+        }
         [Key]
         public int UserInfoID { get; set; }
         [ForeignKey(nameof(ApplicationUser))]

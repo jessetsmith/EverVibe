@@ -48,11 +48,8 @@ else
                 </a>
             </li>*@
         <li>
-            <a href="@Url.Action("Login", "Account", new { id = "loginLink" })">
+            <a  data-toggle="popover"  title="LOGIN" data-content="Login" href="@Url.Action("Login", "Account", new { id = "loginLink" })" >
                 <i class="fas fa-user-alt"></i>
-                @*<span>
-                        <strong>Login</strong>
-                    </span>*@
             </a>
         </li>
 
