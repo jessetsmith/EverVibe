@@ -17,11 +17,37 @@
         <hr />
 
         @{
-            var image = Model.ProfileImage;
-            String img64 = Convert.ToBase64String(image);
-            String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
+            //var userId = User.Identity.GetUserId();
+            var userId = Model.UserID;
+
+            UserInfoService CreateUserInfoService()
+            {
+                var userService = new UserInfoService(userId);
+                return userService;
+            };
+            UserInfoDetail user = null;
+            if(CreateUserInfoService().GetUsersByUserId(userId) != null)
+            {
+
+
+                if (CreateUserInfoService().GetUsersByUserId(userId).ProfileImage == null)
+                {
+
+                <img src="~/Content/Images/userDefault.png" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+
+            }
+            else
+            {
+                user = CreateUserInfoService().GetUsersByUserId(userId);
+
+                var img = user.ProfileImage;
+                String image64 = Convert.ToBase64String(img);
+                String image64URL = string.Format("data:image/" + "png" + ";base64,{0}", image64); //imagetype can be e.g. gif, jpeg, png etc.
+                <img src="@image64URL" class="commentImage" height="400" width="400" style="border-radius:50%;" />
+
+                }
+            }
         }
-        <img src="@img64Url" height="400" width="400" style="border-radius:50%;" />
         <hr />
 
     </div>
@@ -135,7 +161,7 @@
                                 }
                                 @{
 
-                                    var userId = User.Identity.GetUserId();
+                                    //var userId = User.Identity.GetUserId();
 
                                     CommentService CreateCommentService()
                                     {
@@ -160,15 +186,15 @@
                                         <tbody>
                                             @foreach (var comment in comments)
                                             {
-                                                UserInfoService CreateUserInfoService()
-                                                {
-                                                    var _userId = User.Identity.GetUserId();
-                                                    var userService = new UserInfoService(_userId);
-                                                    return userService;
-                                                }
+                                                //UserInfoService CreateUserInfoService()
+                                                //{
+                                                //    var _userId = User.Identity.GetUserId();
+                                                //    var userService = new UserInfoService(_userId);
+                                                //    return userService;
+                                                //}
                                                 var getUser = CreateUserInfoService().GetUsersByUsername(comment.Username);
-                                                var user = getUser.ProfileImage;
-                                                var img = user;
+                                                var _user = getUser.ProfileImage;
+                                                var img = _user;
                                                 String image64 = Convert.ToBase64String(img);
                                                 String image64URL = string.Format("data:image/" + "png" + ";base64,{0}", image64); //imagetype can be e.g. gif, jpeg, png etc.
 

@@ -35,8 +35,9 @@
                                     }
                                 }
                             }
+                        <div class="card-header">
                             <h3 id="cardName">@Html.ActionLink(item.Username, "PublicDetails", new { id = item.UserID }) &nbsp;&nbsp;-&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)</h3>
-
+                        </div>
                             <h4 id="vibeLocation" style="margin-top:-.2em;margin-bottom:1em">@Html.DisplayFor(modelItem => item.Location)</h4>
                             @{
                                 var image = item.Image;
