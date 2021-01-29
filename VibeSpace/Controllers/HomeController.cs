@@ -16,7 +16,9 @@ namespace VibeSpace.Controllers
         private VibeService CreateVibeService()
         {
             var userId = User.Identity.GetUserId();
-            var vibeService = new VibeService(userId);
+            var username = User.Identity.Name;
+
+            var vibeService = new VibeService(userId, username);
             return vibeService;
         }
 
@@ -25,6 +27,13 @@ namespace VibeSpace.Controllers
             var userId = User.Identity.GetUserId();
             var userService = new UserInfoService(userId);
             return userService;
+        }
+
+        private CommentService CreateCommentService()
+        {
+            var userId = User.Identity.GetUserId();
+            var commentService = new CommentService(userId);
+            return commentService;
         }
 
         //public string GetUserId()
@@ -60,17 +69,78 @@ namespace VibeSpace.Controllers
             return View();
         }
 
-        public ActionResult PublicDetails(int? id)
+        //public ActionResult _UsersVibesPartial(int? id)
+        //{
+        //    var vibe = CreateVibeService().GetVibesByID(id);
+        //    var userID = vibe.Select(e => e.UserID).ToString();
+        //    var userVibes = CreateVibeService().GetVibesByUserID(userID);
+
+
+        //    return View(userVibes);
+        //}
+
+        public ActionResult PublicDetails(string id)
         {
-            var vibe = CreateVibeService().GetVibesByID(id);
-            var user = CreateUserInfoService().GetUsersByUsername(vibe.Username);
 
-            if (user == null)
+            //var vibe = CreateVibeService().GetVibeDetailsById(id);
+            UserInfoDetail user = null;
+
+            var userID = id;
+
+            if(userID != null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+                user = CreateUserInfoService().GetUsersByUserId(userID);
+                if(user != null)
+                {
+                    return View(user);
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
 
-            return View(user);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            //ICollection<Vibespace.DATA.Vibe> vibes = user.Vibes;
+
+            //if (user == null)
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            //}
+
+        }
+
+        public ActionResult CommentModal(int? vibeId)
+        {
+            var comments = CreateCommentService().GetCommentsByVibeID(vibeId);
+
+            return View("_CommentModal", comments);
+        }
+
+        [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CommentCreate(CommentCreate comment, int id)
+        {
+            var vibe = CreateVibeService().GetVibeDetailsByVibeId(id);
+
+            if (ModelState.IsValid)
+            {
+                var service = CreateCommentService().CreateComment(comment, id);
+                if (service)
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+                }
+            }
+            return View(vibe);
         }
     }
 }

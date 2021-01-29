@@ -125,7 +125,8 @@ namespace VibeSpace.Services
                         Bio = entity.Bio,
                         Location = entity.Location,
                         ProfileImage = entity.ProfileImage,
-                        Interests = entity.Interests
+                        Interests = entity.Interests,
+                        Vibes = entity.Vibes
                     };
             }
 
@@ -135,21 +136,29 @@ namespace VibeSpace.Services
         {
             using (var ctx = new ApplicationDbContext())
             {
-                id = _userID;
                 var entity =
                     ctx
                     .UsersInfo
-                    .Single(e => e.Id == id);
-                return
-                    new UserInfoDetail
-                    {
-                        Name = entity.Name,
-                        Username = entity.Username,
-                        Bio = entity.Bio,
-                        Location = entity.Location,
-                        ProfileImage = entity.ProfileImage,
-                        Interests = entity.Interests
-                    };
+                    .FirstOrDefault(e => e.Id == id);
+                if(entity != null)
+                {
+                    return
+                        new UserInfoDetail
+                        {
+                            UserID = entity.Id,
+                            Name = entity.Name,
+                            Username = entity.Username,
+                            Bio = entity.Bio,
+                            Location = entity.Location,
+                            ProfileImage = entity.ProfileImage,
+                            Interests = entity.Interests,
+                            Vibes = entity.Vibes
+                        };
+                }
+                else
+                {
+                    return null;
+                }
             }
 
         }
@@ -199,8 +208,9 @@ namespace VibeSpace.Services
 
         }
 
-        public bool UpdateUserInfo(UserInfoEdit model)
+        public bool UpdateUserInfo(UserInfoEdit model, HttpPostedFileBase file)
         {
+            model.ProfileImage = ConvertToBytes(file);
             using (var ctx = new ApplicationDbContext())
             {
                 var entity = ctx

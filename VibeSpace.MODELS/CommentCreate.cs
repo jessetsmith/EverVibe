@@ -8,7 +8,6 @@ namespace VibeSpace.MODELS
 {
     public class CommentCreate
     {
-        public int CommentID { get; set; }
         public string CommentText { get; set; }
  
     }

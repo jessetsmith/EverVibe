@@ -71,6 +71,47 @@ a {
     margin-bottom: 5em;
 }
 
+#commentForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+/*.wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    border: 1px solid white;
+    width: 100%;
+    padding: .5em;
+}*/
+
+th {
+    text-align: center;
+}
+.commentWrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    width: 100%;
+  
+}
+
+.commentList {
+    list-style: none;
+    
+}
+
+.commentForm{
+    border-top: 1px solid white;
+}
+
 /*.form-group {
     width: 50%;
     display: flex;
@@ -243,13 +284,29 @@ section {
 #vibeDescription{
     width: 90%;
     text-justify: inter-cluster;
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+}
+
+#vibeLocation {
+    border-left: 1px solid white;
+    border-right: 1px solid white;
+    padding: .5em;
 }
 
 .vibeIcons {
     font-size: 1em;
+    /*  display: flex;
+    flex-direction: row;
+    justify-content: right;
+    text-align: right;*/
+    float: right;
+    font-family: 'Raleway', sans-serif;
 }
 
-
+#vibeEditDelete {
+    font-family: 'Raleway', sans-serif;
+}
 
 /*#cardTitle {
     margin-top: -1em;
@@ -332,7 +389,7 @@ textarea {
     padding: 1em;
 }
 
-infoDivs {
+#formWrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -340,6 +397,10 @@ infoDivs {
     text-align: center;
     align-items: center;
     vertical-align: central;
+}
+
+.vibeIcons{
+
 }
 
 

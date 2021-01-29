@@ -3,7 +3,7 @@ namespace Vibespace.DATA.Migrations
     using System;
     using System.Data.Entity.Migrations;
     
-    public partial class initCreate : DbMigration
+    public partial class Update : DbMigration
     {
         public override void Up()
         {
@@ -14,6 +14,7 @@ namespace Vibespace.DATA.Migrations
                         CommentID = c.Int(nullable: false, identity: true),
                         Id = c.String(maxLength: 128),
                         VibeID = c.Int(nullable: false),
+                        Username = c.String(),
                         CommentText = c.String(),
                         DateCreated = c.DateTimeOffset(nullable: false, precision: 7),
                         DateModified = c.DateTimeOffset(nullable: false, precision: 7),
@@ -99,10 +100,13 @@ namespace Vibespace.DATA.Migrations
                         Private = c.Boolean(nullable: false),
                         DateCreated = c.DateTimeOffset(nullable: false, precision: 7),
                         DateModified = c.DateTimeOffset(nullable: false, precision: 7),
+                        UserInfo_UserInfoID = c.Int(),
                     })
                 .PrimaryKey(t => t.VibeID)
                 .ForeignKey("dbo.ApplicationUser", t => t.Id)
-                .Index(t => t.Id);
+                .ForeignKey("dbo.UserInfo", t => t.UserInfo_UserInfoID)
+                .Index(t => t.Id)
+                .Index(t => t.UserInfo_UserInfoID);
             
             CreateTable(
                 "dbo.Tag",
@@ -149,6 +153,7 @@ namespace Vibespace.DATA.Migrations
         
         public override void Down()
         {
+            DropForeignKey("dbo.Vibe", "UserInfo_UserInfoID", "dbo.UserInfo");
             DropForeignKey("dbo.Tag", "UserInfo_UserInfoID", "dbo.UserInfo");
             DropForeignKey("dbo.UserInfo", "Id", "dbo.ApplicationUser");
             DropForeignKey("dbo.IdentityUserRole", "IdentityRole_Id", "dbo.IdentityRole");
@@ -162,6 +167,7 @@ namespace Vibespace.DATA.Migrations
             DropIndex("dbo.UserInfo", new[] { "Id" });
             DropIndex("dbo.Tag", new[] { "UserInfo_UserInfoID" });
             DropIndex("dbo.Tag", new[] { "Vibe_VibeID" });
+            DropIndex("dbo.Vibe", new[] { "UserInfo_UserInfoID" });
             DropIndex("dbo.Vibe", new[] { "Id" });
             DropIndex("dbo.IdentityUserRole", new[] { "IdentityRole_Id" });
             DropIndex("dbo.IdentityUserRole", new[] { "ApplicationUser_Id" });

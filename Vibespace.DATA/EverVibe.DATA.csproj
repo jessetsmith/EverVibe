@@ -78,17 +78,9 @@
   <ItemGroup>
     <Compile Include="CommentsAndReactions.cs" />
     <Compile Include="IdentityModels.cs" />
-    <Compile Include="Migrations\202101122338334_initCreate.cs" />
-    <Compile Include="Migrations\202101122338334_initCreate.Designer.cs">
-      <DependentUpon>202101122338334_initCreate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101152007257_edited ICollections on classes.cs" />
-    <Compile Include="Migrations\202101152007257_edited ICollections on classes.Designer.cs">
-      <DependentUpon>202101152007257_edited ICollections on classes.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\202101242201113_updated for ICollection Usage.cs" />
-    <Compile Include="Migrations\202101242201113_updated for ICollection Usage.Designer.cs">
-      <DependentUpon>202101242201113_updated for ICollection Usage.cs</DependentUpon>
+    <Compile Include="Migrations\202101271637579_Update.cs" />
+    <Compile Include="Migrations\202101271637579_Update.Designer.cs">
+      <DependentUpon>202101271637579_Update.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Tag.cs" />
@@ -101,14 +93,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\202101122338334_initCreate.resx">
-      <DependentUpon>202101122338334_initCreate.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101152007257_edited ICollections on classes.resx">
-      <DependentUpon>202101152007257_edited ICollections on classes.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\202101242201113_updated for ICollection Usage.resx">
-      <DependentUpon>202101242201113_updated for ICollection Usage.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\202101271637579_Update.resx">
+      <DependentUpon>202101271637579_Update.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

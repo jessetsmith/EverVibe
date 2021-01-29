@@ -1,29 +1,75 @@
 ﻿
 @using Microsoft.AspNet.Identity
-
+@using VibeSpace.Controllers
+@using VibeSpace.Services
+@using VibeSpace.MODELS
 
 @if (Request.IsAuthenticated)
 {
+    var userId = User.Identity.GetUserId();
+
+    UserInfoService CreateUserInfoService()
+    {
+        var userService = new UserInfoService(userId);
+        return userService;
+    };
+
+    UserInfoDetail user = null;
+    string username = null;
+
+    if (CreateUserInfoService().GetUsersByUserId(userId) == null)
+    {
+        username = User.Identity.Name;
+    }
+    else
+    {
+        user = CreateUserInfoService().GetUsersByUserId(userId);
+        username = user.Name;
+    }
+
     using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
     {
-        @Html.AntiForgeryToken()
+            @Html.AntiForgeryToken()
+
+            <ul class="nav navbar-nav navbar-right">
+           
+                <li>
+                    @{
+                        if (CreateUserInfoService().GetUsersByUserId(userId) != null)
+                        {
 
 
-        <ul class="nav navbar-nav navbar-right">
-            @*<li>
-                @{
-                    @model VibeSpace.Services.UserInfoService
-                    var id = User.Identity.GetUserId();
-                    var _ctx = Model;
-                    var user = _ctx.GetUsersByUserId(id);
-                    var image = user.ProfileImage;
-                    String img64 = Convert.ToBase64String(image);
-                    String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
-                }
-                <img src="@img64Url" height="50" width="50" style="border-radius:50%;" />
-            </li>*@
+                            if (CreateUserInfoService().GetUsersByUserId(userId).ProfileImage == null)
+                            {
+
+                                <img src="~/Content/Images/userDefault.png" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+
+                            }
+                            else
+                            {
+                                user = CreateUserInfoService().GetUsersByUserId(userId);
+
+                                var img = user.ProfileImage;
+                                String image64 = Convert.ToBase64String(img);
+                                String image64URL = string.Format("data:image/" + "png" + ";base64,{0}", image64); //imagetype can be e.g. gif, jpeg, png etc.
+                                <img src="@image64URL" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+
+                            }
+                        }
+                        else
+                        {
+                            {
+
+                                <img src="~/Content/Images/userDefault.png" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+
+                            }
+                        }
+
+                    }
+
+                </li>
             <li>
-                @Html.ActionLink("Profile", "Details", "UserInfo", routeValues: null, htmlAttributes: new { title = "Manage" })
+                @Html.ActionLink(username + "'s Profile", "Details", "UserInfo", routeValues: null, htmlAttributes: new { title = "Manage" })
             </li>
             <li>
                 <a href="javascript:document.getElementById('logoutForm').submit()" data-toggle="popover" title="LOGOUT" data-content="Logout">
@@ -37,18 +83,9 @@
 else
 {
     <ul class="nav navbar-nav navbar-right">
-        @*<li>@Html.ActionLink("Register", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })</li>
-            <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>*@
-        @*<li>
-                <a href="@Url.Action("Register", "Account", new { id = "registerLink" })">
-                    <i class="fas fa-user-edit"></i>
-                    <span>
-                        <strong>Register</strong>
-                    </span>
-                </a>
-            </li>*@
+        
         <li>
-            <a  data-toggle="popover"  title="LOGIN" data-content="Login" href="@Url.Action("Login", "Account", new { id = "loginLink" })" >
+            <a data-toggle="popover" title="LOGIN" data-content="Login" href="@Url.Action("Login", "Account", new { id = "loginLink" })">
                 <i class="fas fa-user-alt"></i>
             </a>
         </li>

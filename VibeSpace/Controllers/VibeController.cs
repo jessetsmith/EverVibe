@@ -19,7 +19,8 @@ namespace VibeSpace.Controllers
         private VibeService CreateVibeService()
         {
             var userId = User.Identity.GetUserId();
-            var vibeService = new VibeService(userId);
+            var username = User.Identity.Name;
+            var vibeService = new VibeService(userId, username);
             return vibeService;
         }
 
@@ -54,12 +55,12 @@ namespace VibeSpace.Controllers
             return View(vibe);
         }
 
-        public ActionResult List()
-        {
-            var vibe = CreateVibeService().GetVibeDetails();
+        //public ActionResult List()
+        //{
+        //    var vibe = CreateVibeService().GetVibeDetailsById();
 
-            return View(vibe);
-        }
+        //    return View(vibe);
+        //}
 
         public ActionResult Create()
         {
@@ -91,13 +92,14 @@ namespace VibeSpace.Controllers
         }
 
         //GET : Delete
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int? vibeId)
         {
+            var id = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VibeDetail vibe = CreateVibeService().GetVibesByID(id);
+            VibeDetail vibe = CreateVibeService().GetVibeDetailsByVibeId(vibeId);
             if (vibe == null)
             {
                 return HttpNotFound();
@@ -109,44 +111,73 @@ namespace VibeSpace.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Delete(int id)
         {
-            var service = CreateVibeService().DeleteVibe(id);
-            if (!service.Equals(1))
+            //var service = CreateVibeService().GetVibeDetailsByVibeId(id);
+            //id = service.VibeID;
+            var userId = User.Identity.GetUserId();
+
+            Vibe vibe = _db.Vibes.Find(id);
+            if (userId == vibe.Id)
+            {
+                _db.Vibes.Remove(vibe);
+                _db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            else
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             }
-            return RedirectToAction("Index");
+            //var service = CreateVibeService().DeleteVibe(id);
+            //if (service)
+            //{
+            //    return RedirectToAction("Index");
+
+            //}
+            //else
+            //{
+            //    return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            //}
         }
 
         //GET : Edit
-        public ActionResult Edit(int? id)
+        public ActionResult Edit(int? vibeId)
         {
+            var id = User.Identity.GetUserId();
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VibeDetail vibe = CreateVibeService().GetVibesByID(id);
-            if (vibe == null)
+            VibeEdit edit = CreateVibeService().GetVibeDetailsEdit(vibeId);
+            if (edit == null)
             {
                 return HttpNotFound();
             }
-            return View(vibe);
+            return View(edit);
         }
 
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(VibeEdit vibe)
+        public ActionResult Edit(VibeEdit vibe, int? vibeId)
         {
+            var id = User.Identity.GetUserId();
+
             if (ModelState.IsValid)
             {
-                var service = CreateVibeService().UpdateVibe(vibe);
-                if (!service.Equals(1))
+                var service = CreateVibeService().UpdateVibe(vibe, vibeId);
+                if (service)
+                {
+                    return RedirectToAction("Index");
+
+                }
+                else
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 }
-                return RedirectToAction("Index");
             }
-            return View(vibe);
+            return View("Index");
         }
 
         //GET : Details
@@ -157,7 +188,7 @@ namespace VibeSpace.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            VibeDetail vibe = CreateVibeService().GetVibesByID(id);
+            VibeDetail vibe = CreateVibeService().GetVibeDetailsById(id);
 
             if (vibe == null)
             {

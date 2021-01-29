@@ -25,7 +25,9 @@ namespace VibeSpace.Controllers
         private VibeService CreateVibeService()
         {
             var userId = User.Identity.GetUserId();
-            var vibeService = new VibeService(userId);
+            var username = User.Identity.Name;
+
+            var vibeService = new VibeService(userId, username);
             return vibeService;
         }
 
@@ -47,16 +49,21 @@ namespace VibeSpace.Controllers
 
         public ActionResult Create(CommentCreate comment, int id)
         {
-            var vibe = CreateVibeService().GetVibesByID(id).VibeID;
+            var vibe = CreateVibeService().GetVibeDetailsByVibeId(id);
 
             if (ModelState.IsValid)
             {
-                var service = CreateCommentService().CreateComment(comment, vibe);
-                if (!service.Equals(1))
+                var service = CreateCommentService().CreateComment(comment, id);
+                if (service)
+                {
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 }
-                return RedirectToAction("Index");
             }
             return View(vibe);
         }
@@ -81,11 +88,16 @@ namespace VibeSpace.Controllers
         public ActionResult Delete(int id)
         {
             var service = CreateCommentService().DeleteComments(id);
-            if (!service.Equals(1))
+            if (service)
+            {
+                return RedirectToAction("Index", "Home");
+
+            }
+            else
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
             }
-            return RedirectToAction("Index");
         }
 
         //GET : Edit
@@ -95,7 +107,7 @@ namespace VibeSpace.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            CommentDetail comment = CreateCommentService().GetCommentsByID(id);
+            CommentEdit comment = CreateCommentService().GetCommentsByIdEdit(id);
             if (comment == null)
             {
                 return HttpNotFound();
@@ -106,16 +118,21 @@ namespace VibeSpace.Controllers
 
         [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(CommentEdit comment)
+        public ActionResult Edit(CommentEdit comment, int id)
         {
             if (ModelState.IsValid)
             {
-                var service = CreateCommentService().UpdateComment(comment);
-                if (!service.Equals(1))
+                var service = CreateCommentService().UpdateComment(comment, id);
+                if (service)
+                {
+                    return RedirectToAction("Index", "Home");
+
+                }
+                else
                 {
                     return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
                 }
-                return RedirectToAction("Index");
             }
             return View(comment);
         }
@@ -124,17 +141,8 @@ namespace VibeSpace.Controllers
 
         public ActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            CommentDetail comment = CreateCommentService().GetCommentsByID(id);
-
-            if (comment == null)
-            {
-                return HttpNotFound();
-            }
-            return View(comment);
+            var comments = CreateCommentService().GetCommentsByVibeID(id);
+            return View(comments);
         }
     }
 }

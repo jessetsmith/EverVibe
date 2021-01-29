@@ -1,60 +1,200 @@
-﻿@model VibeSpace.MODELS.VibeDetail
+﻿@using Microsoft.AspNet.Identity
+@using VibeSpace.Controllers
+@using VibeSpace.Services
+@using VibeSpace.MODELS
+
+@model VibeSpace.MODELS.UserInfoDetail
 
 @{
     ViewBag.Title = "Details";
 }
+<script type="text/javascript" src="@Url.Action("Create")"></script>
+<h2>About @Model.Name</h2>
+<hr />
 
-<h2>Details</h2>
+<div class="row" id="userInfoDetail">
+    <div class="col-lg-6" id="infoDivs">
+        <hr />
 
-<div>
-    <h4>VibeDetail</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.VibeID)
-        </dt>
+        @{
+            var image = Model.ProfileImage;
+            String img64 = Convert.ToBase64String(image);
+            String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
+        }
+        <img src="@img64Url" height="400" width="400" style="border-radius:50%;" />
+        <hr />
 
-        <dd>
-            @Html.DisplayFor(model => model.VibeID)
-        </dd>
+    </div>
+    <div class="col-lg-6" id="infoDivs">
+        <hr />
+        <br />
+        <h3>
+            @Html.DisplayNameFor(model => model.Name)
+        </h3>
+        <h4>
+            @Html.DisplayFor(model => model.Name)
+        </h4>
 
-        <dt>
+        <h3>
             @Html.DisplayNameFor(model => model.Username)
-        </dt>
-
-        <dd>
+        </h3>
+        <h4>
             @Html.DisplayFor(model => model.Username)
-        </dd>
+        </h4>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
+        <h3>
+            @Html.DisplayNameFor(model => model.Bio)
+        </h3>
 
-        <dd>
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-
-        <dt>
+        <h4>
+            @Html.DisplayFor(model => model.Bio)
+        </h4>
+        <h3>
             @Html.DisplayNameFor(model => model.Location)
-        </dt>
+        </h3>
 
-        <dd>
+        <h4>
             @Html.DisplayFor(model => model.Location)
-        </dd>
+        </h4>
+        <br />
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-
-    </dl>
+        <hr />
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+<hr />
+<section>
+    <h1>@Model.Name's Vibes</h1>
+    <div class="container-fluid" id="page-wrapper">
+        <div class="container-fluid" id="main">
+            <div class="border"></div>
+            <div class="scrolling-wrapper">
+                @{
+                    VibeService CreateVibeService()
+                    {
+                        var vibeService = new VibeService(Model.UserID, Model.Username);
+                        return vibeService;
+                    }
+
+                    var vibes = CreateVibeService().GetVibesByUsername(Model.Username);
+
+                    foreach (var item in vibes)
+                    {
+                        <div id="card-@item.VibeID.ToString()" class="card">
+                            @{
+                                var userID = User.Identity.GetUserId();
+                                if (Request.IsAuthenticated)
+                                {
+                                    if (userID == Model.UserID)
+                                    {
+                                        <span class="vibeIcons" id="vibeEditDelete"><a id="registerLink" href="@Url.Action("Edit", "Vibe", new { vibeId = item.VibeID })"><i class="fas fa-edit"></i></a>&nbsp;|&nbsp;<a id="registerLink" href="@Url.Action("Delete", "Vibe", new { vibeId = item.VibeID })"><i class="fas fa-trash"></i></a></span>
+                                    }
+                                }
+                            }
+                            <h3 id="cardName">@Html.ActionLink(item.Username, "PublicDetails", new { id = item.VibeID }) &nbsp;&nbsp;|&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)</h3>
+                            @{
+
+                            }
+                            <h4 style="margin-top:-.2em;margin-bottom:1em">@Html.DisplayFor(modelItem => item.Location)</h4>
+                            @{
+                                var _image = item.Image;
+                                String _img64 = Convert.ToBase64String(_image);
+                                String _img64Url = string.Format("data:image/" + "png" + ";base64,{0}", _img64); //imagetype can be e.g. gif, jpeg, png etc.
+                            }
+                            <img src="@_img64Url" class="vibeImage" height="350" width="400" @*style="border-radius:50%;*@ />
+                            <p id="vibeDescription">@Html.DisplayFor(modelItem => item.Description)</p>
+                            <div id="commentForm">
+                                @{ if (Request.IsAuthenticated)
+                                    {
+                                        using (Html.BeginForm("Create", "Comment", routeValues: new { id = item.VibeID }))
+                                        {
+                                            var commentController = new CommentController();
+                                            var controller = commentController.Create();
+                                            var commentModel = new CommentCreate();
+
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="form-horizontal" id="commentForm">
+                                                <hr />
+                                                <h4>Comments</h4>
+                                                <hr />
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                                <div class="form-group">
+                                                    <label>Leave a Comment</label>
+                                                    @*@Html.TextBox("CommentText", htmlAttributes: new {style = "color: white" })*@
+                                                    <input id="CommentText" name="CommentText" class="form-control" value="" type="text" />
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input type="submit" value="Comment" class="btn btn-info" id="loginSubmit" />
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                                @{
+
+                                    var userId = User.Identity.GetUserId();
+
+                                    CommentService CreateCommentService()
+                                    {
+                                        var commentService = new CommentService(userId);
+                                        return commentService;
+                                    }
+
+
+                                    var comments = CreateCommentService().GetCommentsByVibeID(item.VibeID);
+                                    if (comments.Count() > 0)
+                                    {
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="col-lg-3"></th>
+                                                    <th scope="col" class="col-lg-3">Username</th>
+                                                    <th scope="col" class="col-lg-3">Comment</th>
+                                                    <th scope="col" class="col-lg-3">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var comment in comments)
+                                                {
+                                                    UserInfoService CreateUserInfoService()
+                                                    {
+                                                        var _userId = User.Identity.GetUserId();
+                                                        var userService = new UserInfoService(_userId);
+                                                        return userService;
+                                                    }
+                                                    var getUser = CreateUserInfoService().GetUsersByUsername(comment.Username);
+                                                    var user = getUser.ProfileImage;
+                                                    var img = user;
+                                                    String image64 = Convert.ToBase64String(img);
+                                                    String image64URL = string.Format("data:image/" + "png" + ";base64,{0}", image64); //imagetype can be e.g. gif, jpeg, png etc.
+
+
+                                                    <tr>
+                                                        <td class="col-lg-2">
+                                                            <img src="@image64URL" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+                                                        </td>
+                                                        <td class="col-lg-2">@Html.ActionLink(comment.Username, "PublicDetails", new { id = item.UserID })</td>
+                                                        <td class="col-lg-6">@comment.CommentText</td>
+                                                        <td class="col-lg-2">@comment.DateCreated</td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                }
+                            </div>
+                        </div>
+
+                    }
+                }
+            </div>
+
+        </div>
+    </div>
+</section>
 
 

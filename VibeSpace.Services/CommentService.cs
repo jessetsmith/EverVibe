@@ -58,9 +58,10 @@ namespace VibeSpace.Services
             var getUser = userInfoService.GetUsersByID(_userID);
             var username = getUser.Username;
 
-            var vibeService = new VibeService(_userID);
-            var getVibeID = vibeService.GetVibesByID(id);
-            var vibeID = getVibeID.VibeID;
+            var vibeService = new VibeService(_userID, username);
+            var getVibeID = vibeService.GetVibeDetailsByVibeId(id);
+            
+            id = getVibeID.VibeID;
 
             var ctx = new ApplicationDbContext();
             var user = ctx.Users.Find(_userID);
@@ -70,7 +71,8 @@ namespace VibeSpace.Services
                 new CommentsAndReactions()
                 {
                     Id = _userID,
-                    VibeID = vibeID,
+                    VibeID = id,
+                    Username = username,
                     CommentText = model.CommentText,
                     DateCreated = DateTimeOffset.UtcNow
                 };
@@ -103,7 +105,7 @@ namespace VibeSpace.Services
             }
         }
 
-        public IEnumerable<CommentListItem> GetCommentsByVibeID(int id)
+        public IEnumerable<CommentListItem> GetCommentsByVibeID(int? id)
         {
 
             using (var ctx = new ApplicationDbContext())
@@ -116,7 +118,10 @@ namespace VibeSpace.Services
                         e =>
                         new CommentListItem
                         {
-                            //Username = e.Username,
+                            CommentID = e.CommentID,
+                            UserID = e.Id,
+                            Username = e.Username,
+                            CommentText = e.CommentText,
                             DateCreated = e.DateCreated
                         });
                 return query.ToArray();
@@ -135,7 +140,7 @@ namespace VibeSpace.Services
                 return
                     new CommentDetail
                     {
-                        //Username = entity.Username,
+                        Username = entity.Username,
                         CommentText = entity.CommentText,
                         DateCreated = entity.DateCreated
                     };
@@ -143,7 +148,25 @@ namespace VibeSpace.Services
 
         }
 
-        public bool UpdateComment(CommentEdit model)
+        public CommentEdit GetCommentsByIdEdit(int? id)
+        {
+            using (var ctx = new ApplicationDbContext())
+            {
+                var entity =
+                    ctx
+                    .Comments_Reactions
+                    .Single(e => e.CommentID == id);
+                return
+                    new CommentEdit
+                    {
+                        CommentText = entity.CommentText
+                        
+                    };
+            }
+
+        }
+
+        public bool UpdateComment(CommentEdit model, int id)
         {
             var userInfoService = new UserInfoService(_userID);
             var getUser = userInfoService.GetUsersByID(_userID);
@@ -153,9 +176,8 @@ namespace VibeSpace.Services
             {
                 var entity = ctx
                     .Comments_Reactions
-                    .Single(e => e.Id == _userID);
+                    .Single(e => e.Id == _userID && e.CommentID == id);
 
-                //entity.Username = username;
                 entity.CommentText = model.CommentText;
                 entity.DateModified = DateTimeOffset.UtcNow;
 

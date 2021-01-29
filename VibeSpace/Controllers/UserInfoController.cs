@@ -31,7 +31,9 @@ namespace VibeSpace.Controllers
         private VibeService CreateVibeService()
         {
             var userId = User.Identity.GetUserId();
-            var vibeService = new VibeService(userId);
+            var username = User.Identity.Name;
+
+            var vibeService = new VibeService(userId, username);
             return vibeService;
         }
 
@@ -46,17 +48,10 @@ namespace VibeSpace.Controllers
 
         public ActionResult Create()
         {
+            var ctx = new ApplicationDbContext();
             var userId = User.Identity.GetUserId();
 
-            if (CreateUserInfoService().GetUsersByUserId(userId) == null)
-            {
-                return View();
-            }
-            else
-            {
-                return JavaScript("alert('User Info Already Exists. If you'd like to make changes, please use the Edit Option')");
-
-            }
+            return View();
         }
 
         [HttpPost, ActionName("Create")]
@@ -71,7 +66,7 @@ namespace VibeSpace.Controllers
                     var service = CreateUserInfoService().CreateUserInfo(user, file);
                     if (service)
                     {
-                        return RedirectToAction("Index");
+                        return RedirectToAction("Detail");
 
                     }
                     else
@@ -144,7 +139,9 @@ namespace VibeSpace.Controllers
         {
             if (ModelState.IsValid)
             {
-                var service = CreateUserInfoService().UpdateUserInfo(user);
+                HttpPostedFileBase file = Request.Files["Image"];
+
+                var service = CreateUserInfoService().UpdateUserInfo(user, file);
                 if (service)
                 {
                     return RedirectToAction("Index");
@@ -161,6 +158,16 @@ namespace VibeSpace.Controllers
 
         //GET : Details
 
+        //public ActionResult _UsersVibesPartial(int? id)
+        //{
+        //    var vibe = CreateVibeService().GetVibesByID(id);
+        //    var userID = vibe.Select(e => e.UserID).ToString();
+        //    var userVibes = CreateVibeService().GetVibesByUserID(userID);
+
+
+        //    return View(userVibes);
+        //}
+
         public ActionResult Details(string id)
         {
             id = User.Identity.GetUserId();
@@ -170,30 +177,34 @@ namespace VibeSpace.Controllers
             }
             //var vibes = CreateVibeService().get
             var user = CreateUserInfoService().GetUsersByUserId(id);
+            var vibes = CreateVibeService().GetVibesByUserID(id);
+
+            ViewBag.vibes = vibes;
 
             if (user == null)
             {
-                return HttpNotFound();
+                JavaScript("<script language='javascript'>window.alert('Please create a user profile')</script>");
+                return RedirectToAction("Create", "UserInfo");
             }
-            return View(user);
+            return View("Details", user);
         }
 
-        public ActionResult PublicDetails(int? id)
-        {
-            var vibe = CreateVibeService().GetVibesByID(id);
-            var user = CreateUserInfoService().GetUsersByUsername(vibe.Username);
-            
-            if (user == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-
-            return View(user);
-        }
-
-        //public ActionResult userVibes()
+        //public ActionResult PublicDetails(int? id)
         //{
-            
+        //    var vibe = CreateVibeService().GetVibesByID(id);
+        //    var userID = vibe.Select(e => e.Username).ToString();
+
+        //    var user = CreateUserInfoService().GetUsersByUsername(userID);
+        //    ICollection<Vibespace.DATA.Vibe> vibes = user.Vibes;
+
+        //    if (user == null)
+        //    {
+        //        return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+        //    }
+
+        //    return View(user);
         //}
+
+
     }
 }

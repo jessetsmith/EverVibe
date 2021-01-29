@@ -27,6 +27,7 @@ namespace Vibespace.DATA
         public string Location { get; set; }
         public byte[] ProfileImage { get; set; }
         public virtual ICollection<Tag> Interests { get; set; }
+        public virtual ICollection<Vibe> Vibes { get; set; }
         public DateTimeOffset DateModified { get; set; }
     }
 }

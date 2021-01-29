@@ -7,13 +7,13 @@ namespace Vibespace.DATA.Migrations
     using System.Resources;
     
     [GeneratedCode("EntityFramework.Migrations", "6.1.0-30225")]
-    public sealed partial class editedICollectionsonclasses : IMigrationMetadata
+    public sealed partial class Update : IMigrationMetadata
     {
-        private readonly ResourceManager Resources = new ResourceManager(typeof(editedICollectionsonclasses));
+        private readonly ResourceManager Resources = new ResourceManager(typeof(Update));
         
         string IMigrationMetadata.Id
         {
-            get { return "202101152007257_edited ICollections on classes"; }
+            get { return "202101271637579_Update"; }
         }
         
         string IMigrationMetadata.Source
