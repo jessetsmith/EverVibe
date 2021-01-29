@@ -1,5 +1,19 @@
-﻿@model IEnumerable<VibeSpace.MODELS.VibeListItem>
+﻿
+@using Microsoft.AspNet.Identity
+@using VibeSpace.Controllers
+@using VibeSpace.Services
+@using VibeSpace.MODELS
+@model IEnumerable<VibeSpace.MODELS.VibeListItem>
 
+@{
+    ViewBag.Title = "Home Page";
+}
+
+@*<div class="jumbotron">
+        <h1>VIBE with us</h1>
+        <p class="lead">Whether it's the music, the scenery, or the all-around atmosphere, this is the place to share your favorite vibes with the world</p>
+        <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+    </div>*@
 <section>
     <div class="container-fluid" id="page-wrapper">
         <div class="container-fluid" id="main">
@@ -11,29 +25,131 @@
                     foreach (var item in Model)
                     {
                         <div id="card-@item.VibeID.ToString()" class="card">
-                            <h2>@Html.DisplayFor(modelItem => item.Username)</h2>
-                            <h3>@Html.DisplayFor(modelItem => item.Title) </h3>
-                            <h5>@Html.DisplayFor(modelItem => item.Location)</h5>
+                            @{
+                                var userID = User.Identity.GetUserId();
+                                if (Request.IsAuthenticated)
+                                {
+                                    if (userID == item.UserID)
+                                    {
+                                        <span class="vibeIcons" id="vibeEditDelete"><a id="registerLink" href="@Url.Action("Edit", "Vibe", new { vibeId = item.VibeID })"><i class="fas fa-edit"></i></a>&nbsp;|&nbsp;<a id="registerLink" href="@Url.Action("Delete", "Vibe", new { vibeId = item.VibeID })"><i class="fas fa-trash"></i></a></span>
+                                    }
+                                }
+                            }
+                            <h3 id="cardName">@Html.ActionLink(item.Username, "PublicDetails", new { id = item.UserID }) &nbsp;&nbsp;-&nbsp;&nbsp; @Html.DisplayFor(modelItem => item.Title)</h3>
+
+                            <h4 id="vibeLocation" style="margin-top:-.2em;margin-bottom:1em">@Html.DisplayFor(modelItem => item.Location)</h4>
                             @{
                                 var image = item.Image;
                                 String img64 = Convert.ToBase64String(image);
                                 String img64Url = string.Format("data:image/" + "png" + ";base64,{0}", img64); //imagetype can be e.g. gif, jpeg, png etc.
                             }
-                            <img src="@img64Url" height="300" width="300" @*style="border-radius:50%;*@ />
-                            <p>@Html.DisplayFor(modelItem => item.Description)</p>
-                            @*<ul>@Html.DisplayFor(modelItem => item.Tags.ToList())</ul>*@
+                            <img src="@img64Url" class="vibeImage" height="350" width="400" @*style="border-radius:50%;*@ />
+                            <p id="vibeDescription">@Html.DisplayFor(modelItem => item.Description)</p>
+                            <hr />
+                            <div id="commentForm">
+                                @{ if (Request.IsAuthenticated)
+                                    {
+                                        using (Html.BeginForm("Create", "Comment", routeValues: new { id = item.VibeID }))
+                                        {
+                                            var commentController = new CommentController();
+                                            var controller = commentController.Create();
+                                            var commentModel = new CommentCreate();
+
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="form-horizontal" id="commentForm">
+
+                                                <h4 class="commentHeader">Comments</h4>
+
+                                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                                                <div class="form-group">
+                                                    <label>Leave a Comment</label>
+                                                    @*@Html.TextBox("CommentText", htmlAttributes: new {style = "color: white" })*@
+                                                    <input id="CommentText" name="CommentText" class="form-control" value="" type="text" />
+
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input type="submit" value="Comment" class="btn btn-info" id="loginSubmit" />
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                }
+                                @{
+                                    var userId = User.Identity.GetUserId();
+
+                                    CommentService CreateCommentService()
+                                    {
+                                        var commentService = new CommentService(userId);
+                                        return commentService;
+                                    }
+
+
+                                    var comments = CreateCommentService().GetCommentsByVibeID(item.VibeID);
+
+                                    if (comments.Count() > 0)
+                                    {
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col" class="col-lg-3"></th>
+                                                    <th scope="col" class="col-lg-3">Username</th>
+                                                    <th scope="col" class="col-lg-3">Comment</th>
+                                                    <th scope="col" class="col-lg-3">Date</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var comment in comments)
+                                                {
+                                                    UserInfoService CreateUserInfoService()
+                                                    {
+                                                        var _userId = User.Identity.GetUserId();
+                                                        var userService = new UserInfoService(_userId);
+                                                        return userService;
+                                                    }
+                                                    var getUser = CreateUserInfoService().GetUsersByUsername(comment.Username);
+                                                    var user = getUser.ProfileImage;
+                                                    var _image = user;
+                                                    String _img64 = Convert.ToBase64String(_image);
+                                                    String _img64Url = string.Format("data:image/" + "png" + ";base64,{0}", _img64); //imagetype can be e.g. gif, jpeg, png etc.
+
+
+                                                    <tr>
+                                                        <td class="col-lg-2">
+                                                            <img src="@_img64Url" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+                                                        </td>
+                                                        <td class="col-lg-2">@Html.ActionLink(comment.Username, "PublicDetails", new { id = item.UserID })</td>
+                                                        <td class="col-lg-6">@comment.CommentText</td>
+                                                        <td class="col-lg-2" style="text-align: center; align-content: center; align-items: center">
+                                                            @comment.DateCreated
+                                                            @{
+                                                                if (Request.IsAuthenticated)
+                                                                {
+                                                                    if (userID == comment.UserID)
+                                                                    {
+                                                                        <a id="registerLink" href="@Url.Action("Edit", "Comment", new { id = comment.CommentID })"><i class="fas fa-edit"></i></a><p>&nbsp;|&nbsp;</p><a id="registerLink" href="@Url.Action("Delete", "Comment", new { id = comment.CommentID })"><i class="fas fa-trash"></i></a>
+                                                                    }
+                                                                }
+                                                            }
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    }
+                                }
+                            </div>
                         </div>
 
                     }
                 }
+
             </div>
 
         </div>
     </div>
 </section>
 
-        @*}*@
-
-        @*<p>
-                @Html.ActionLink("Create New", "Create")
-            </p>*@

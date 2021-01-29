@@ -148,44 +148,44 @@
                                     if (comments.Count() > 0)
                                     {
 
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th scope="col" class="col-lg-3"></th>
-                                                    <th scope="col" class="col-lg-3">Username</th>
-                                                    <th scope="col" class="col-lg-3">Comment</th>
-                                                    <th scope="col" class="col-lg-3">Date</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach (var comment in comments)
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="col-lg-3"></th>
+                                                <th scope="col" class="col-lg-3">Username</th>
+                                                <th scope="col" class="col-lg-3">Comment</th>
+                                                <th scope="col" class="col-lg-3">Date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var comment in comments)
+                                            {
+                                                UserInfoService CreateUserInfoService()
                                                 {
-                                                    UserInfoService CreateUserInfoService()
-                                                    {
-                                                        var _userId = User.Identity.GetUserId();
-                                                        var userService = new UserInfoService(_userId);
-                                                        return userService;
-                                                    }
-                                                    var getUser = CreateUserInfoService().GetUsersByUsername(comment.Username);
-                                                    var user = getUser.ProfileImage;
-                                                    var img = user;
-                                                    String image64 = Convert.ToBase64String(img);
-                                                    String image64URL = string.Format("data:image/" + "png" + ";base64,{0}", image64); //imagetype can be e.g. gif, jpeg, png etc.
-
-
-                                                    <tr>
-                                                        <td class="col-lg-2">
-                                                            <img src="@image64URL" class="commentImage" height="50" width="50" style="border-radius:50%;" />
-                                                        </td>
-                                                        <td class="col-lg-2">@Html.ActionLink(comment.Username, "PublicDetails", new { id = item.UserID })</td>
-                                                        <td class="col-lg-6">@comment.CommentText</td>
-                                                        <td class="col-lg-2">@comment.DateCreated</td>
-                                                    </tr>
+                                                    var _userId = User.Identity.GetUserId();
+                                                    var userService = new UserInfoService(_userId);
+                                                    return userService;
                                                 }
-                                            </tbody>
-                                        </table>
+                                                var getUser = CreateUserInfoService().GetUsersByUsername(comment.Username);
+                                                var user = getUser.ProfileImage;
+                                                var img = user;
+                                                String image64 = Convert.ToBase64String(img);
+                                                String image64URL = string.Format("data:image/" + "png" + ";base64,{0}", image64); //imagetype can be e.g. gif, jpeg, png etc.
+
+
+                                                <tr>
+                                                    <td class="col-lg-2">
+                                                        <img src="@image64URL" class="commentImage" height="50" width="50" style="border-radius:50%;" />
+                                                    </td>
+                                                    <td class="col-lg-2">@Html.ActionLink(comment.Username, "PublicDetails", new { id = item.UserID })</td>
+                                                    <td class="col-lg-6">@comment.CommentText</td>
+                                                    <td class="col-lg-2">@comment.DateCreated</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                        }
                                     }
-                                }
                             </div>
                         </div>
 

@@ -19,6 +19,7 @@ namespace Vibespace.DATA
         [ForeignKey(nameof(Vibe))]
         public int VibeID { get; set; }
         public virtual Vibe Vibe { get; set; }
+        public string Username { get; set; }
         public string CommentText { get; set; }
         public DateTimeOffset DateCreated { get; set; }
         public DateTimeOffset DateModified { get; set; }

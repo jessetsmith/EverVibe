@@ -4,7 +4,7 @@
 }
 
 <div class="register-wrapper">
-    <br/>
+    <br />
     <h2>@ViewBag.Title.</h2>
     <hr />
     @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form", id = "registerForm" }))
@@ -38,6 +38,13 @@
                 <input id="registerSubmit" type="submit" class="btn btn-info" value="Register" />
             </div>
         </div>
+        <a id="registerLink" href="@Url.Action("Login", "Account")">
+            <i class="fas fa-user-alt">
+                <i class="fas fa-sign-in-alt"></i>
+                <strong style=" font-family: Arial, Helvetica, sans-serif;">Already have an account? Log in now!</strong>
+            </i>
+
+        </a>
     }
 </div>
 @section Scripts {

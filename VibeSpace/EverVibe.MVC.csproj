@@ -192,6 +192,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Images\userDefault.png" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -254,10 +255,19 @@
     <Content Include="Views\Vibe\Edit.cshtml" />
     <Content Include="Views\Vibe\Details.cshtml" />
     <Content Include="Views\Shared\_VibesPartial.cshtml" />
+    <Content Include="Views\Home\PublicDetails.cshtml" />
+    <Content Include="Views\UserInfo\UsersVibes.cshtml" />
+    <Content Include="Views\Shared\_UsersVibesPartial.cshtml" />
+    <Content Include="Views\UserInfo\_UsersVibesPartial.cshtml" />
+    <Content Include="Views\Home\_UsersVibesPartial.cshtml" />
+    <Content Include="Views\Comment\Create.cshtml" />
+    <Content Include="Views\Comment\Details.cshtml" />
+    <Content Include="Views\Home\_CreatePartial.cshtml" />
+    <Content Include="Views\Comment\Delete.cshtml" />
+    <Content Include="Views\Comment\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Views\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

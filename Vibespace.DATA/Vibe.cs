@@ -12,6 +12,11 @@ namespace Vibespace.DATA
 {
     public class Vibe
     {
+        public Vibe()
+        {
+            this.Tags = new HashSet<Tag>();
+            this.Comments = new HashSet<CommentsAndReactions>();
+        }
         [Key]
         public int VibeID { get; set; }
         [ForeignKey(nameof(User))]

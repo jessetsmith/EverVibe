@@ -9,6 +9,8 @@ namespace VibeSpace.MODELS
     public class CommentEdit
     {
         public int CommentID { get; set; }
+        public string UserID { get; set; }
+
         public string CommentText { get; set; }
     }
 }
