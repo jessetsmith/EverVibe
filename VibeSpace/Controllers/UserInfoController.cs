@@ -66,7 +66,7 @@ namespace VibeSpace.Controllers
                     var service = CreateUserInfoService().CreateUserInfo(user, file);
                     if (service)
                     {
-                        return RedirectToAction("Detail");
+                        return RedirectToAction("Details");
 
                     }
                     else

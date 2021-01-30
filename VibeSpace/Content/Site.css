@@ -80,6 +80,15 @@ a {
     text-align: center;
 }
 
+#vibeCreateForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+}
+
 /*.wrapper {
     display: flex;
     flex-direction: column;
@@ -169,7 +178,12 @@ section {
     justify-content: center;
     align-items: center;
     align-content: center;
+    text-align: center;
     
+}
+
+label {
+    margin-bottom:1em;
 }
 
 .border {
@@ -399,9 +413,18 @@ textarea {
     vertical-align: central;
 }
 
-.vibeIcons{
-
+#imageInput {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    vertical-align: central;
 }
+
+
+
 
 
 footer p {

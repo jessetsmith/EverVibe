@@ -113,13 +113,6 @@ namespace VibeSpace.Controllers
 
         }
 
-        public ActionResult CommentModal(int? vibeId)
-        {
-            var comments = CreateCommentService().GetCommentsByVibeID(vibeId);
-
-            return View("_CommentModal", comments);
-        }
-
         [HttpPost, ActionName("Create")]
         [ValidateAntiForgeryToken]
         public ActionResult CommentCreate(CommentCreate comment, int id)

@@ -49,12 +49,12 @@
     <div class="form-group col-md-12">
         @Html.LabelFor(model => model.ProfileImage, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-12">
-            <input type="file" name="Image" id="profileImageUpload" onchange="(this);" />
+            <input style="cursor: pointer" type="file" name="Image" id="profileImageUpload" onchange="(this);" />
         </div>
     </div>
 
     <div class="form-group col-md-12">
-        <div class="col-md-12">
+        <div class="col-md-12" id="formWrapper">
             <input type="submit" value="Create" class="btn btn-info" id="loginSubmit"/>
         </div>
     </div>
@@ -62,7 +62,7 @@
     }
 
     <div>
-        @Html.ActionLink("Back to List", "Index")
+        @Html.ActionLink("Back to Vibes", "Index", "Home")
     </div>
 
     @section Scripts {
