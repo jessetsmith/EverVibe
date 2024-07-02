@@ -1,4 +1,3 @@
-![name-of-you-image](https://your-copied-image-address)
 # EverVibe
 Evervibe is an original concept and design for a social media platform for sharing and building community around good vibes. 
 
